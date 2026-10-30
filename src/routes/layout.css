@@ -1,0 +1,19 @@
+:root {
+    --color-text: #80c88e;
+    --color-framebg: #27391c;
+    --color-border: #255f38;
+    --color-bg: #18230f;
+    --color-buttonbg: #1f7d53;
+}
+
+
+
+@font-face {
+    font-family: C059;
+    src: url('/fonts/C059-Roman.otf');
+}
+
+body {
+    font-family: C059;
+    background-color: var(--color-bg);
+}
