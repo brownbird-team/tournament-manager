@@ -35,10 +35,12 @@ actor User as "Korisnik"
 actor Visitor as "Posjetitelj"
 actor Admin as "Administrator"
 actor Owner as "Vlasnik organizacije"
+actor Competitor as "Natjecatelj"
 
 Admin -|> Owner
 Owner -|> User
-User  -|> Visitor
+User -|> Visitor
+Competitor -up-|> User
 
 ' ================================================================
 ' Sekundarni akteri (vanjski sustavi)
@@ -53,20 +55,36 @@ actor "Tetr.io Bot" as Tetrio <<external system>>
 ' ================================================================
 
 rectangle "Tournament manager" as bbtm {
-  (UC-00 Prijava u aplikaciju) as UC_login
-
-  ' Administracija
-  (UC-00 Bannanje korisnika sa instance) as UC_global_ban
+  ' Korisnički računi
+  (UC-01 Prijava u sustav) as UC_login
+  (UC-02 Inicijalizacija korisničkog računa) as UC_register
+  (UC-03 Izmjena podataka o korisniku) as UC_user_settings
+  (UC-07 Pretraga korisnika) as UC_user_search
 
   ' Organizacije
-  (UC-00 Kreiranje organizacije) as UC_org_create
-  (UC-00 Postavljanje postavki organizacije) as UC_org_settings
-  (UC-00 Dodavanje vlasnika organizacije) as UC_org_addOwner
-  (UC-00 Bannanje korisnika iz organizacije) as UC_org_ban
+  (UC-04 Stvaranje nove organizacije) as UC_org_create
+  (UC-05 Izmjena postavki organizacije) as UC_org_settings
+  (UC-06 Brisanje organizacije) as UC_org_delete
+  (UC-08 Pretraga organizacija) as UC_org_search
+  (UC-11 Resetiranje API tokena organizacije) as UC_org_reset_token
+  (UC-21 Izvršavanje akcija putem API-a) as UC_org_api
   
   ' Turniri
-  (UC-00 Kreiranje turnira)
-  (UC-00 Postavljanje postavki turnira)
+  (UC-09 Stvaranje novog turnira) as UC_tour_create
+  (UC-10 Izmjena postavki turnira) as UC_tour_settings
+  (UC-12 Prijava na turnir) as UC_tour_register
+  (UC-13 Check-in na turnir) as UC_tour_check_in
+  (UC-14 Odjava s turnira prije početka) as UC_tour_unregister
+  (UC-15 Predaja tijekom turnira) as UC_tour_resign
+  (UC-16 Izbacivanje natjecatelja s turnira) as UC_tour_kick
+  (UC-17 Prijava rezultata meča) as UC_tour_report_result
+  (UC-18 Komunikacija tijekom meča - chat) as UC_tour_chat
+  (UC-19 Prijava problema tijekom meča) as UC_tour_report_problem
+  (UC-22 Odgovor na prijavu problema tijekom meča) as UC_tour_problem_response
+  (UC-23 Sudjelovanje u meču tijekom turnira) as UC_tour_compete
+
+  ' Administracija
+  (UC-20 Zabrana pristupa stranici) as UC_ban
 }
 
 ' ================================================================
@@ -74,28 +92,46 @@ rectangle "Tournament manager" as bbtm {
 ' ================================================================
 
 Visitor -- UC_login
+Visitor -- UC_user_search
+Visitor -- UC_org_search
 
+User -- UC_user_settings
 User -- UC_org_create
+User -- UC_tour_register
 
-Owner -- UC_org_ban
 Owner -- UC_org_settings
+Owner -- UC_org_delete
+Owner -- UC_tour_create
+Owner -- UC_tour_settings
+Owner -- UC_org_reset_token
+Owner -- UC_tour_kick
+Owner -- UC_tour_problem_response
 
-Admin -- UC_global_ban
+Competitor -- UC_tour_check_in
+Competitor -- UC_tour_unregister
+Competitor -- UC_tour_resign
+Competitor -- UC_tour_compete
+
+Admin -- UC_ban
 
 ' ================================================================
 ' Veze između slučajeva uporabe
 ' ================================================================
 
-UC_org_settings <.. UC_org_addOwner
+UC_login ..> UC_register : <<include>>
+
+UC_tour_compete <.. UC_tour_report_result : <<extend>>\n[Forma za unos]
+UC_tour_compete <.. UC_tour_chat : <<extend>>
+UC_tour_compete <.. UC_tour_report_problem : <<extend>>\n[Tipka alert]
 
 ' ================================================================
 ' Interakcije sa sekundarnim akterima
 ' ================================================================
 
 Idp -up- UC_login
-Steam -up- UC_org_settings
+Idp -[hidden]up- UC_register
 
-'Idp -[hidden]up- UC_org_add_owner
-'Steam -[hidden]up- UC_org_add_owner
+Tetrio -up- UC_org_api
+Tetrio -[hidden]up- UC_register
 
 @enduml
