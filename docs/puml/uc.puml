@@ -1,0 +1,101 @@
+' ================================================================
+' BrownBird Tournament manager
+'
+' Dijagram prikazuje tko i s kojim ciljem koristi pojedine
+' dijelove sustava.
+'
+' Made by BrownBird Team (progi edition)
+' ================================================================
+
+@startuml
+title BrownBird Tournament Manager - slučajevi uporabe
+left to right direction
+
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam ArrowColor #212529
+
+skinparam actor {
+  BackgroundColor #F8F9FA
+  BorderColor #212529
+  BackgroundColor<<external system>> #FFF3CD
+  BorderColor<<external system>> #856404
+}
+
+skinparam usecase {
+  BackgroundColor #E7F1FF
+  BorderColor #0D6EFD
+}
+
+' ================================================================
+' Primarni akteri
+' ================================================================
+
+actor User as "Korisnik"
+actor Visitor as "Posjetitelj"
+actor Admin as "Administrator"
+actor Owner as "Vlasnik organizacije"
+
+Admin -|> Owner
+Owner -|> User
+User  -|> Visitor
+
+' ================================================================
+' Sekundarni akteri (vanjski sustavi)
+' ================================================================
+
+actor "Pružatelj identiteta" as Idp <<external system>>
+actor "Steam API" as Steam <<external system>>
+actor "Tetr.io Bot" as Tetrio <<external system>>
+
+' ================================================================
+' Granica sustava (slučajevi uporabe)
+' ================================================================
+
+rectangle "Tournament manager" as bbtm {
+  (UC-00 Prijava u aplikaciju) as UC_login
+
+  ' Administracija
+  (UC-00 Bannanje korisnika sa instance) as UC_global_ban
+
+  ' Organizacije
+  (UC-00 Kreiranje organizacije) as UC_org_create
+  (UC-00 Postavljanje postavki organizacije) as UC_org_settings
+  (UC-00 Dodavanje vlasnika organizacije) as UC_org_addOwner
+  (UC-00 Bannanje korisnika iz organizacije) as UC_org_ban
+  
+  ' Turniri
+  (UC-00 Kreiranje turnira)
+  (UC-00 Postavljanje postavki turnira)
+}
+
+' ================================================================
+' Interakcije sa akterima
+' ================================================================
+
+Visitor -- UC_login
+
+User -- UC_org_create
+
+Owner -- UC_org_ban
+Owner -- UC_org_settings
+
+Admin -- UC_global_ban
+
+' ================================================================
+' Veze između slučajeva uporabe
+' ================================================================
+
+UC_org_settings <.. UC_org_addOwner
+
+' ================================================================
+' Interakcije sa sekundarnim akterima
+' ================================================================
+
+Idp -up- UC_login
+Steam -up- UC_org_settings
+
+'Idp -[hidden]up- UC_org_add_owner
+'Steam -[hidden]up- UC_org_add_owner
+
+@enduml
