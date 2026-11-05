@@ -1,0 +1,732 @@
+{
+  "id": "0",
+  "name": "ER dijagram",
+  "createdAt": "2026-11-05T20:00:03.700Z",
+  "updatedAt": "2026-11-05T21:46:27.918Z",
+  "databaseType": "postgresql",
+  "tables": [
+    {
+      "id": "1",
+      "name": "group",
+      "schema": "public",
+      "x": -215.83213183872476,
+      "y": -280.0961035222133,
+      "fields": [
+        {
+          "id": "2",
+          "name": "group_id",
+          "type": {
+            "id": "bigint",
+            "name": "bigint"
+          },
+          "primaryKey": true,
+          "unique": true,
+          "nullable": false,
+          "createdAt": 1793877970317
+        },
+        {
+          "id": "3",
+          "name": "stage_id",
+          "type": {
+            "id": "bigint",
+            "name": "bigint"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1793878153289
+        },
+        {
+          "id": "4",
+          "name": "current_round",
+          "type": {
+            "id": "bigint",
+            "name": "bigint"
+          },
+          "unique": false,
+          "nullable": false,
+          "primaryKey": false,
+          "createdAt": 1793910361665
+        }
+      ],
+      "indexes": [
+        {
+          "id": "5",
+          "name": "",
+          "unique": true,
+          "fieldIds": [
+            "2"
+          ],
+          "createdAt": 1793877970317,
+          "isPrimaryKey": true
+        }
+      ],
+      "color": "#8eb7ff",
+      "isView": false,
+      "createdAt": 1793877970317,
+      "order": 2,
+      "diagramId": "3ymt1u2qi09m"
+    },
+    {
+      "id": "6",
+      "name": "group_participant",
+      "schema": "public",
+      "x": -592.9603706685298,
+      "y": 122.69207065130043,
+      "fields": [
+        {
+          "id": "7",
+          "name": "group_participant_id",
+          "type": {
+            "id": "bigint",
+            "name": "bigint"
+          },
+          "primaryKey": true,
+          "unique": true,
+          "nullable": false,
+          "createdAt": 1793878001517
+        },
+        {
+          "id": "8",
+          "name": "group_id",
+          "type": {
+            "id": "bigint",
+            "name": "bigint"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1793878197269
+        },
+        {
+          "id": "9",
+          "name": "participant_id",
+          "type": {
+            "id": "bigint",
+            "name": "bigint"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1793878239219
+        },
+        {
+          "id": "10",
+          "name": "score",
+          "type": {
+            "id": "bigint",
+            "name": "bigint"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1793878244443
+        },
+        {
+          "id": "11",
+          "name": "data",
+          "type": {
+            "id": "json",
+            "name": "json"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1793878573504
+        },
+        {
+          "id": "12",
+          "name": "seed",
+          "type": {
+            "id": "bigint",
+            "name": "bigint"
+          },
+          "unique": false,
+          "nullable": false,
+          "primaryKey": false,
+          "createdAt": 1793912095927
+        }
+      ],
+      "indexes": [
+        {
+          "id": "13",
+          "name": "",
+          "unique": true,
+          "fieldIds": [
+            "7"
+          ],
+          "createdAt": 1793878001517,
+          "isPrimaryKey": true
+        }
+      ],
+      "color": "#8eb7ff",
+      "isView": false,
+      "createdAt": 1793878001517,
+      "order": 4,
+      "diagramId": "3ymt1u2qi09m"
+    },
+    {
+      "id": "14",
+      "name": "round",
+      "schema": "public",
+      "x": 293.47508876299895,
+      "y": -550.9106661881999,
+      "fields": [
+        {
+          "id": "15",
+          "name": "round_id",
+          "type": {
+            "id": "bigint",
+            "name": "bigint"
+          },
+          "primaryKey": true,
+          "unique": true,
+          "nullable": false,
+          "createdAt": 1793879001831
+        },
+        {
+          "id": "16",
+          "name": "group_id",
+          "type": {
+            "id": "bigint",
+            "name": "bigint"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": true,
+          "createdAt": 1793879038400
+        }
+      ],
+      "indexes": [
+        {
+          "id": "17",
+          "name": "",
+          "unique": true,
+          "fieldIds": [
+            "15"
+          ],
+          "createdAt": 1793879001831,
+          "isPrimaryKey": true
+        }
+      ],
+      "color": "#8eb7ff",
+      "isView": false,
+      "createdAt": 1793879001831,
+      "width": 224,
+      "order": 5,
+      "diagramId": "3ymt1u2qi09m"
+    },
+    {
+      "id": "18",
+      "name": "stage",
+      "schema": "public",
+      "x": -766.9544058264414,
+      "y": -248.41742176298015,
+      "fields": [
+        {
+          "id": "19",
+          "name": "stage_id",
+          "type": {
+            "id": "bigint",
+            "name": "bigint"
+          },
+          "primaryKey": true,
+          "unique": true,
+          "nullable": false,
+          "createdAt": 1793877963065
+        },
+        {
+          "id": "20",
+          "name": "tournament_id",
+          "type": {
+            "id": "bigint",
+            "name": "bigint"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1793878033252
+        },
+        {
+          "id": "21",
+          "name": "mm_type",
+          "type": {
+            "id": "text",
+            "name": "text"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1793878041643
+        },
+        {
+          "id": "22",
+          "name": "mm_data",
+          "type": {
+            "id": "jsonb",
+            "name": "jsonb"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1793878059653
+        },
+        {
+          "id": "23",
+          "name": "stage_type",
+          "type": {
+            "id": "text",
+            "name": "text"
+          },
+          "unique": false,
+          "nullable": false,
+          "primaryKey": false,
+          "createdAt": 1793908941993
+        },
+        {
+          "id": "24",
+          "name": "slug",
+          "type": {
+            "id": "text",
+            "name": "text"
+          },
+          "unique": false,
+          "nullable": false,
+          "primaryKey": false,
+          "createdAt": 1793909830939
+        }
+      ],
+      "indexes": [
+        {
+          "id": "25",
+          "name": "",
+          "unique": true,
+          "fieldIds": [
+            "19"
+          ],
+          "createdAt": 1793877963065,
+          "isPrimaryKey": true
+        },
+        {
+          "id": "26",
+          "name": "index_2",
+          "unique": true,
+          "fieldIds": [
+            "20",
+            "19"
+          ],
+          "createdAt": 1793880644484
+        }
+      ],
+      "color": "#8eb7ff",
+      "isView": false,
+      "createdAt": 1793877963065,
+      "order": 1,
+      "diagramId": "3ymt1u2qi09m"
+    },
+    {
+      "id": "27",
+      "name": "tournament",
+      "schema": "public",
+      "x": -1224.3508002157414,
+      "y": -315.8689419280058,
+      "fields": [
+        {
+          "id": "28",
+          "name": "tournament_id",
+          "type": {
+            "id": "bigint",
+            "name": "bigint"
+          },
+          "primaryKey": true,
+          "unique": true,
+          "nullable": false,
+          "createdAt": 1793825318560
+        }
+      ],
+      "indexes": [
+        {
+          "id": "29",
+          "name": "",
+          "unique": true,
+          "fieldIds": [
+            "28"
+          ],
+          "createdAt": 1793825318560,
+          "isPrimaryKey": true
+        }
+      ],
+      "color": "#8eb7ff",
+      "isView": false,
+      "createdAt": 1793825318560,
+      "order": 3,
+      "diagramId": "3ymt1u2qi09m"
+    },
+    {
+      "id": "30",
+      "name": "match",
+      "schema": "public",
+      "x": 650.161843060892,
+      "y": -204.2657230518224,
+      "fields": [
+        {
+          "id": "31",
+          "name": "group_id",
+          "type": {
+            "id": "bigint",
+            "name": "bigint"
+          },
+          "unique": false,
+          "nullable": false,
+          "primaryKey": true,
+          "createdAt": 1793909425326
+        },
+        {
+          "id": "32",
+          "name": "match_id",
+          "type": {
+            "id": "int",
+            "name": "int"
+          },
+          "primaryKey": true,
+          "unique": true,
+          "nullable": false,
+          "createdAt": 1793877977405
+        },
+        {
+          "id": "33",
+          "name": "round_id",
+          "type": {
+            "id": "bigint",
+            "name": "bigint"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1793905161966
+        },
+        {
+          "id": "34",
+          "name": "participant_1_id",
+          "type": {
+            "id": "bigint",
+            "name": "bigint"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": true,
+          "createdAt": 1793905783600
+        },
+        {
+          "id": "35",
+          "name": "participant_2_id",
+          "type": {
+            "id": "bigint",
+            "name": "bigint"
+          },
+          "unique": false,
+          "nullable": true,
+          "primaryKey": false,
+          "createdAt": 1793909466550
+        }
+      ],
+      "indexes": [
+        {
+          "id": "36",
+          "name": "",
+          "unique": true,
+          "fieldIds": [
+            "31",
+            "32"
+          ],
+          "createdAt": 1793877977405,
+          "isPrimaryKey": true
+        }
+      ],
+      "color": "#8eb7ff",
+      "isView": false,
+      "createdAt": 1793877977405,
+      "order": 3,
+      "diagramId": "3ymt1u2qi09m"
+    },
+    {
+      "id": "37",
+      "name": "participant",
+      "schema": "public",
+      "x": -37.54019544155432,
+      "y": -6.874611926239922,
+      "fields": [
+        {
+          "id": "38",
+          "name": "participant_id",
+          "type": {
+            "id": "bigint",
+            "name": "bigint"
+          },
+          "primaryKey": true,
+          "unique": true,
+          "nullable": false,
+          "createdAt": 1793905214423
+        },
+        {
+          "id": "39",
+          "name": "user_id",
+          "type": {
+            "id": "bigint",
+            "name": "bigint"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": true,
+          "createdAt": 1793905297839
+        },
+        {
+          "id": "40",
+          "name": "init_group_id",
+          "type": {
+            "id": "bigint",
+            "name": "bigint"
+          },
+          "unique": false,
+          "nullable": true,
+          "primaryKey": false,
+          "createdAt": 1793914776659
+        },
+        {
+          "id": "41",
+          "name": "init_seed",
+          "type": {
+            "id": "bigint",
+            "name": "bigint"
+          },
+          "unique": false,
+          "nullable": true,
+          "primaryKey": false,
+          "createdAt": 1793915034712
+        }
+      ],
+      "indexes": [
+        {
+          "id": "42",
+          "name": "",
+          "unique": true,
+          "fieldIds": [
+            "38"
+          ],
+          "createdAt": 1793905214424,
+          "isPrimaryKey": true
+        }
+      ],
+      "color": "#8eb7ff",
+      "isView": false,
+      "createdAt": 1793905214423,
+      "order": 6,
+      "diagramId": "3ymt1u2qi09m"
+    },
+    {
+      "id": "43",
+      "name": "init_group",
+      "x": 510.05258113549155,
+      "y": 57.274003636773514,
+      "fields": [
+        {
+          "id": "44",
+          "name": "init_group_id",
+          "type": {
+            "id": "bigint",
+            "name": "bigint"
+          },
+          "unique": true,
+          "nullable": false,
+          "primaryKey": true,
+          "createdAt": 1793914719907
+        },
+        {
+          "id": "45",
+          "name": "group_name",
+          "type": {
+            "id": "bigint",
+            "name": "bigint"
+          },
+          "unique": false,
+          "nullable": true,
+          "primaryKey": false,
+          "createdAt": 1793914755507
+        }
+      ],
+      "indexes": [
+        {
+          "id": "46",
+          "name": "",
+          "fieldIds": [
+            "44"
+          ],
+          "unique": true,
+          "isPrimaryKey": true,
+          "createdAt": 1793914719907
+        }
+      ],
+      "color": "#8eb7ff",
+      "createdAt": 1793914719907,
+      "isView": false,
+      "order": 7,
+      "schema": "public"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "47",
+      "name": "group_group_id_fk",
+      "sourceSchema": "public",
+      "sourceTableId": "1",
+      "targetSchema": "public",
+      "targetTableId": "14",
+      "sourceFieldId": "2",
+      "targetFieldId": "16",
+      "sourceCardinality": "one",
+      "targetCardinality": "many",
+      "createdAt": 1793905128885,
+      "diagramId": "3ymt1u2qi09m"
+    },
+    {
+      "id": "48",
+      "name": "group_id_fk",
+      "sourceSchema": "public",
+      "sourceTableId": "1",
+      "targetSchema": "public",
+      "targetTableId": "6",
+      "sourceFieldId": "2",
+      "targetFieldId": "8",
+      "sourceCardinality": "one",
+      "targetCardinality": "many",
+      "createdAt": 1793878233327,
+      "diagramId": "3ymt1u2qi09m"
+    },
+    {
+      "id": "49",
+      "name": "group_stage_id_fk",
+      "sourceSchema": "public",
+      "sourceTableId": "18",
+      "targetSchema": "public",
+      "targetTableId": "1",
+      "sourceFieldId": "19",
+      "targetFieldId": "3",
+      "sourceCardinality": "one",
+      "targetCardinality": "many",
+      "createdAt": 1793878163725,
+      "diagramId": "3ymt1u2qi09m"
+    },
+    {
+      "id": "50",
+      "name": "participants_participant_id_fk",
+      "sourceSchema": "public",
+      "sourceTableId": "37",
+      "targetSchema": "public",
+      "targetTableId": "30",
+      "sourceFieldId": "38",
+      "targetFieldId": "34",
+      "sourceCardinality": "one",
+      "targetCardinality": "many",
+      "createdAt": 1793905798142,
+      "diagramId": "3ymt1u2qi09m"
+    },
+    {
+      "id": "51",
+      "name": "participants_participant_id_fk",
+      "sourceSchema": "public",
+      "sourceTableId": "37",
+      "targetSchema": "public",
+      "targetTableId": "6",
+      "sourceFieldId": "38",
+      "targetFieldId": "9",
+      "sourceCardinality": "one",
+      "targetCardinality": "many",
+      "createdAt": 1793905761922,
+      "diagramId": "3ymt1u2qi09m"
+    },
+    {
+      "id": "52",
+      "name": "round_round_id_fk",
+      "sourceSchema": "public",
+      "sourceTableId": "14",
+      "targetSchema": "public",
+      "targetTableId": "30",
+      "sourceFieldId": "15",
+      "targetFieldId": "33",
+      "sourceCardinality": "one",
+      "targetCardinality": "many",
+      "createdAt": 1793905184755,
+      "diagramId": "3ymt1u2qi09m"
+    },
+    {
+      "id": "53",
+      "name": "stage_tournament_id_fk",
+      "sourceSchema": "public",
+      "sourceTableId": "27",
+      "targetSchema": "public",
+      "targetTableId": "18",
+      "sourceFieldId": "28",
+      "targetFieldId": "20",
+      "sourceCardinality": "one",
+      "targetCardinality": "many",
+      "createdAt": 1793878111227,
+      "diagramId": "3ymt1u2qi09m"
+    },
+    {
+      "id": "54",
+      "name": "match_group_id_fk",
+      "sourceSchema": "public",
+      "sourceTableId": "1",
+      "targetSchema": "public",
+      "targetTableId": "30",
+      "sourceFieldId": "2",
+      "targetFieldId": "31",
+      "sourceCardinality": "one",
+      "targetCardinality": "many",
+      "createdAt": 1793909505027
+    },
+    {
+      "id": "55",
+      "name": "participant_participant_id_fk",
+      "sourceSchema": "public",
+      "sourceTableId": "37",
+      "targetSchema": "public",
+      "targetTableId": "30",
+      "sourceFieldId": "38",
+      "targetFieldId": "35",
+      "sourceCardinality": "one",
+      "targetCardinality": "many",
+      "createdAt": 1793909720364
+    },
+    {
+      "id": "56",
+      "name": "round_round_id_fk",
+      "sourceSchema": "public",
+      "sourceTableId": "14",
+      "targetSchema": "public",
+      "targetTableId": "1",
+      "sourceFieldId": "15",
+      "targetFieldId": "4",
+      "sourceCardinality": "one",
+      "targetCardinality": "one",
+      "createdAt": 1793910390317
+    },
+    {
+      "id": "57",
+      "name": "initial_groups_init_group_id_fk",
+      "sourceSchema": "public",
+      "sourceTableId": "43",
+      "targetSchema": "public",
+      "targetTableId": "37",
+      "sourceFieldId": "44",
+      "targetFieldId": "40",
+      "sourceCardinality": "one",
+      "targetCardinality": "many",
+      "createdAt": 1793914788405
+    }
+  ],
+  "dependencies": [],
+  "areas": [],
+  "customTypes": [],
+  "notes": []
+}
