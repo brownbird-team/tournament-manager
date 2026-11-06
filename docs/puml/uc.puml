@@ -68,7 +68,7 @@ rectangle "Tournament manager" as bbtm {
   (UC-08 Pretraga organizacija) as UC_org_search
   (UC-11 Resetiranje API tokena organizacije) as UC_org_reset_token
   (UC-21 Izvršavanje akcija putem API-a) as UC_org_api
-  
+
   ' Turniri
   (UC-09 Stvaranje novog turnira) as UC_tour_create
   (UC-10 Izmjena postavki turnira) as UC_tour_settings
@@ -103,7 +103,6 @@ Owner -- UC_org_settings
 Owner -- UC_org_delete
 Owner -- UC_tour_create
 Owner -- UC_tour_settings
-Owner -- UC_org_reset_token
 Owner -- UC_tour_kick
 Owner -- UC_tour_problem_response
 
@@ -120,18 +119,25 @@ Admin -- UC_ban
 
 UC_login ..> UC_register : <<include>>
 
-UC_tour_compete <.. UC_tour_report_result : <<extend>>\n[Forma za unos]
+UC_tour_compete <.. UC_tour_report_result : <<extend>>
 UC_tour_compete <.. UC_tour_chat : <<extend>>
-UC_tour_compete <.. UC_tour_report_problem : <<extend>>\n[Tipka alert]
+UC_tour_compete <.. UC_tour_report_problem : <<extend>>
+
+UC_org_settings <.. UC_org_reset_token : <<extend>>
+'UC_org_delete -[hidden]- UC_org_reset_token
 
 ' ================================================================
 ' Interakcije sa sekundarnim akterima
 ' ================================================================
 
 Idp -up- UC_login
-Idp -[hidden]up- UC_register
+Idp -[hidden]up- UC_org_reset_token
+Idp -[hidden]up- UC_user_search
 
 Tetrio -up- UC_org_api
-Tetrio -[hidden]up- UC_register
+Tetrio -[hidden]up- UC_org_reset_token
+
+Steam -up- UC_tour_settings
+Steam -[hidden]up- UC_org_reset_token
 
 @enduml
