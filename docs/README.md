@@ -12,6 +12,7 @@ Svi završeni dokumenti bit će premješteni u ovaj direktorij. Radne verzije do
 - [Razrada korisničkog sučelja](https://hedgedoc.brownbird.eu/s/rBYHlK8VQA)
 - [Analiza zahtjeva](https://hedgedoc.brownbird.eu/s/7fl8L9mDOP)
 - [Obrasci uporabe](https://hedgedoc.brownbird.eu/s/eLYP1prPL2)
+- [Arhitektura i oblikovanje](https://hedgedoc.brownbird.eu/s/XkJLgQwB-Q)
 
 ## Dizajn korisničkog sučelja
 
