@@ -1,0 +1,209 @@
+// ----------------------------------------------------------
+// Users and organizations
+// ----------------------------------------------------------
+
+Table user {
+  user_id int [primary key]
+  username varchar [unique, not null]
+  bio text
+}
+
+Table user_session {
+  user_id int
+  token text
+
+  indexes {
+    (user_id, token) [pk]
+  }
+}
+
+Ref: user_session.user_id > user.user_id
+
+Table user_auth {
+  user_id int
+  plugin_id varchar
+  auth_data json [not null]
+
+  indexes {
+    (user_id, plugin_id) [pk]
+  }
+}
+
+Ref: user_auth.user_id > user.user_id
+
+Table organization {
+  org_id int [primary key]
+  slug varchar [unique, not null]
+  description text
+  api_token text
+}
+
+Table organization_owner {
+  org_id int
+  user_id int
+
+  indexes {
+    (org_id, user_id) [pk]
+  }
+}
+
+Ref: organization_owner.org_id > organization.org_id
+Ref: organization_owner.user_id > user.user_id
+
+// ----------------------------------------------------------
+// Web Chat
+// ----------------------------------------------------------
+
+Table chat {
+  chat_id int [primary key]
+}
+
+Table message {
+  message_id int [primary key]
+  chat_id int [not null]
+  user_id int
+  participant_id int
+  author_type varchar [not null]
+  body text [not null]
+}
+
+Ref: message.chat_id > chat.chat_id
+Ref: message.user_id >? user.user_id
+Ref: message.participant_id >? participant.participant_id
+
+// ----------------------------------------------------------
+// Tournament data
+// ----------------------------------------------------------
+
+Table tournament {
+  tournament_id int [primary key]
+  org_id int [not null]
+  name varchar [not null]
+  slug varchar [unique, not null]
+  rules text
+  description text
+  start_time datetime
+  owner_chat_id int [not null, unique]
+}
+
+Ref: tournament.org_id > organization.org_id
+Ref: tournament.owner_chat_id - chat.chat_id
+
+Table init_group {
+  init_group_id int
+  tournament_id int
+
+  indexes {
+    (init_group_id, tournament_id) [pk]
+  }
+}
+
+Ref: init_group.tournament_id > tournament.tournament_id
+
+Table participant {
+  participant_id int [primary key]
+  tournament_id int [not null]
+  user_id int [not null]
+  archived_data json [not null]
+  init_group_id int
+
+  indexes {
+    (participant_id, tournament_id) [unique] // useless
+  }
+}
+
+Ref: participant.user_id > user.user_id
+Ref: participant.tournament_id > tournament.tournament_id
+Ref: participant.(init_group_id, tournament_id) > 
+  init_group.(init_group_id, tournament_id)
+
+Table stage {
+  stage_id int [primary key]
+  tournament_id int [not null]
+  mm_type varchar [not null]
+  mm_data json [not null]
+  stage_type varchar [not null]
+
+  indexes {
+    (stage_id, tournament_id) [unique] // useless
+    (tournament_id, stage_type) [unique]
+  }
+}
+
+Ref: stage.tournament_id > tournament.tournament_id
+
+Table group {
+  group_id int [primary key]
+  stage_id int [not null]
+  tournament_id int [not null]
+  slug varchar
+  current_round int
+
+  indexes {
+    (group_id, tournament_id) [unique] // useless
+    (tournament_id, slug) [unique]
+  }
+}
+
+Ref: group.(stage_id, tournament_id) > stage.(stage_id, tournament_id)
+
+Table round {
+  round_id int
+  group_id int
+
+  indexes {
+    (round_id, group_id) [pk]
+  }
+}
+
+Ref: group.group_id < round.group_id
+
+Table group_participant {
+  group_id int
+  participant_id int
+  tournament_id int
+  mm_data json
+  order int
+
+  indexes {
+    (participant_id, group_id) [pk]
+  }
+}
+
+Ref: group.(group_id, tournament_id) <
+  group_participant.(group_id, tournament_id)
+Ref: participant.(participant_id, tournament_id) < 
+  group_participant.(participant_id, tournament_id)
+
+Table match {
+  match_id int
+  group_id int [not null]
+  round_id int [not null]
+
+  p1_id int
+  p2_id int
+
+  report_p1_self int
+  report_p1_opponent int
+  report_p2_self int
+  report_p2_opponent int
+
+  score_p1 int
+  score_p2 int
+  winner_id int
+  alert boolean [not null, default: false]
+  status varchar
+  chat_id int [not null, unique]
+
+  indexes {
+    (match_id, group_id) [pk]
+  }
+}
+
+Ref: match.chat_id - chat.chat_id
+Ref: match.(round_id, group_id) > round.(round_id, group_id)
+
+Ref: match.(p1_id, group_id) > 
+  group_participant.(participant_id, group_id)
+Ref: match.(p2_id, group_id) > 
+  group_participant.(participant_id, group_id)
