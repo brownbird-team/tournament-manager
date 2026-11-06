@@ -1,0 +1,75 @@
+' ================================================================
+' BrownBird Tournament manager
+'
+' Prikazuje glavne komponente sustava.
+'
+' Made by BrownBird Team (progi edition)
+' ================================================================
+
+@startuml cmp
+title BrownBird Tournament Manager - dijagram komponenata
+left to right direction
+
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam componentStyle rectangle
+skinparam ArrowColor #212529
+
+skinparam component {
+    BackgroundColor #E7F1FF
+    BorderColor #0D6EFD
+}
+
+skinparam database {
+    BackgroundColor #FFF3CD
+    BorderColor #212529
+}
+
+' ================================================================
+' Granica sustava i unutarnje komponente
+' ================================================================
+
+rectangle "Tournament Manager" {
+    component "Web klijent" as Web
+
+    rectangle "Pristupni sloj" {
+        component "Korisnički API" as UserAPI
+        component "Bot API" as BotAPI
+    }
+
+    rectangle "Interni servisi" {
+        component "Web chat upravitelj" as Chat
+        component "Upravitelj korisnicima" as UserManager
+        component "Upravitelj turnirima" as TourManager
+        component "Upravitelj organizacijama" as OrgManager
+    }
+
+    database "PostgreSQL" as DB
+}
+
+component "Pružatelj identiteta\n(vanjski)" as Idp
+component "Steam API\n(vanjski)" as Steam
+component "tetr.io bot\n(vanjski)" as Tetrio
+
+TourManager --> Steam
+Tetrio --> BotAPI
+UserManager --> Idp
+
+Web --> UserAPI
+
+UserAPI --> UserManager
+UserAPI --> TourManager
+UserAPI --> OrgManager
+UserAPI --> Chat
+
+BotAPI --> TourManager
+BotAPI --> Chat
+
+Chat --> DB
+TourManager --> DB
+UserManager --> DB
+OrgManager --> DB
+
+Idp -[hidden]up- Steam
+
+@enduml
