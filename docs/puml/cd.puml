@@ -1,0 +1,46 @@
+' ================================================================
+' BrownBird Tournament manager
+'
+' Dijagram klasa
+'
+' Made by BrownBird Team (progi edition)
+' ================================================================
+
+@startuml
+title BrownBird Tournament Manager - domenski model
+
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam packageStyle rectangle
+skinparam ArrowColor #212529
+
+skinparam class {
+    BackgroundColor #E7F1FF
+    BorderColor #0D6EFD
+}
+
+skinparam note {
+    BackgroundColor #F8F9FA
+    BorderColor #212529
+    FontColor #212529
+}
+
+package "Entities" {
+    class User <<Entity>> {
+        +id: integer
+        +username: string
+        +imageHash: string
+        +bio: string
+        +ban(reason: string): void
+    }
+
+    class Organization {
+        +id: integer
+        +name: string
+        +slug: string
+        +description: string
+        +apiToken: string | null
+    }
+}
+
+@enduml
