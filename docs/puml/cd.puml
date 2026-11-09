@@ -26,21 +26,14 @@ skinparam note {
 }
 
 package "Entities" {
-    class User <<Entity>> {
-        +id: integer
-        +username: string
-        +imageHash: string
-        +bio: string
-        +ban(reason: string): void
-    }
-
-    class Organization {
-        +id: integer
-        +name: string
-        +slug: string
-        +description: string
-        +apiToken: string | null
-    }
+    class User <<Entity>> {}
+    class Organization <<Entity>> {}
+    class ChatRoom <<Entity>> {}
+    class ChatMessage <<Entity>> {}
+    class Tournament <<Entity>> {}
+    class Participant <<Entity>> {}
+    class Match <<Entity>> {}
+    
 }
 
 @enduml
