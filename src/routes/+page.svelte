@@ -1,6 +1,7 @@
 <script lang="ts">
     import { enhance } from '$app/forms';
     import type { PageProps } from './$types.js';
+    import bilbo from './mycomp.svelte'
 
     const { data }: PageProps = $props()
     let count = $state(0)
@@ -21,3 +22,4 @@
     <input type="text" name="username">
     <input type="submit" value="Šalji sestro">
 </form>
+
