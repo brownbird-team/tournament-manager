@@ -20,3 +20,6 @@ Za dizajniranje sučelja koristimo našu [Penpot instancu](https://penpot.brownb
 
 - [Pokazna verzija nekih stranica za 4tj](https://penpot.brownbird.eu/#/view?file-id=d7c9b99f-3e38-80f6-8008-da9f56553551&page-id=28dd5794-0d85-80c9-8008-dc2ebcd460c5&section=comments&index=0&share-id=01be08ad-5b23-4deb-9a15-d98f95f01fc6)
 - [Pokazna verzija nekih stranica za 5tj](https://penpot.brownbird.eu/#/view?file-id=d7c9b99f-3e38-80f6-8008-da9f56553551&page-id=d4d2cd88-9db1-80ad-8008-e3ae5d1c3c08&section=interactions&index=0&zoom=fit&share-id=6db1c350-fcdd-4873-b1a2-94206245e4b0)
+
+## Upute za git
+- [Upute za git workflow](https://hedgedoc.brownbird.eu/s/IZBV6iXgLd)
