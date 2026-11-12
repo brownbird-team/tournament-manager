@@ -3,10 +3,8 @@ import Profile from './components/Profile.svelte';
 
 import type { WidgetPack } from "#plugins/core/types.ts";
 
-const widgets = {
+export default {
     handle: Handle,
     pfp: Profile,
 
 } satisfies WidgetPack;
-
-export default widgets;

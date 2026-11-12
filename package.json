@@ -6,9 +6,9 @@
 	"imports": {
 		"#lib": "./src/lib/index.js",
 		"#lib/*": "./src/lib/*",
-		"#plugins/client": "./config/plugins.client.ts",
-		"#plugins/server": "./config/plugins.server.ts",
-		"#plugins/core/*": "./src/lib/plugins/*"
+		"#config/*": "./config/*",
+		"#plugins/core/*": "./src/lib/plugins/*",
+		"#plugins/*": "./plugins/*"
 	},
 	"scripts": {
 		"dev": "vite dev",
