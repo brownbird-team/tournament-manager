@@ -29,7 +29,7 @@
 	.app_container {
         display: flex;
         flex-direction: column;
-		background-color: rgba(222, 187, 144, 0); 
+		background-color: rgb(255, 209, 180); 
 		min-width: 100%;
 		min-height: 100vh;
 		justify-content: flex-start;

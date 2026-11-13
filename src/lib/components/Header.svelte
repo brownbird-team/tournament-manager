@@ -28,7 +28,7 @@
         flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
-		width: 98%;
+		min-width: 98%;
 	}
 
 .logo{
