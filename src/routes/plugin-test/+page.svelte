@@ -1,3 +1,3 @@
 <script lang="ts">
-    import Render from '#plugins/core/Renderer.svelte';
+    import Widget from '#lib/plugins/Widget.svelte';
 </script>

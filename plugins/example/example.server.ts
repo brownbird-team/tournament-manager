@@ -1,5 +1,5 @@
 import widgets from './example.client';
-import type { Plugin } from '#plugins/core/types.ts';
+import type { PluginConfig } from '#plugins/core/types.ts';
 
 export interface DiscordUserData {
     id: string;
@@ -8,7 +8,6 @@ export interface DiscordUserData {
 }
 
 export const plugin = {
-    id: 'core.discord',
     title: 'My discord plugin',
     widgets: {
         handle: {
@@ -21,6 +20,6 @@ export const plugin = {
         }
     }
     
-} satisfies Plugin<DiscordUserData, typeof widgets>;
+} satisfies PluginConfig<DiscordUserData, typeof widgets>;
 
 export default plugin;
