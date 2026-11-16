@@ -24,12 +24,13 @@
 	:global(body) {
     margin: 0;
 	font-family: 'Inter', sans-serif;
+	background-color: #F3E8D8;
 }
 
 	.app_container {
         display: flex;
         flex-direction: column;
-		background-color: rgb(255, 209, 180); 
+		background-color: #C58B68; 
 		min-width: 100%;
 		min-height: 100vh;
 		justify-content: flex-start;
