@@ -21,8 +21,8 @@
 		margin-left: 3px;
 		margin-right: 4px;
 		border-radius: 10px;
-		border: rgb(255, 203, 47) 2px solid;
-		background-color: rgb(153, 100, 79);
+		border: #E2BE96 2px solid;
+		background-color: #98583D;
 		height: 6vh;
 		display: flex;
         flex-direction: row;
@@ -44,7 +44,7 @@
 
 .top_bar > p{
     margin-left: 10px;
-    color: aliceblue;
+    color: #face9c;
 }
 
 
