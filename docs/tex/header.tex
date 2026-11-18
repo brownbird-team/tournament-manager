@@ -1,0 +1,39 @@
+% Dependencies
+\usepackage[table]{xcolor}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{calc}
+\usepackage{etoolbox}
+\usepackage{needspace}
+
+% Change TOC name
+\renewcommand{\contentsname}{Sadržaj}
+
+% Table spacing
+\renewcommand{\arraystretch}{1.3}
+\setlength{\tabcolsep}{8pt}
+
+% Define color for shaded rows
+\definecolor{tableShade}{HTML}{F2F5F8}
+
+% Alternating row colors
+\AtBeginEnvironment{longtable}{
+    \rowcolors{2}{tableShade}{white}
+}
+
+% Level 1: Always start on a new page
+\let\oldsection\section
+\renewcommand{\section}{\clearpage\oldsection}
+
+% Level 2: Keep heading with following content
+\AddToHook{cmd/subsection/before}{\Needspace{7\baselineskip}}
+
+% Level 3: Keep heading with following content
+\AddToHook{cmd/subsubsection/before}{\Needspace{6\baselineskip}}
+
+% Level 4: Keep heading with following content
+\AddToHook{cmd/paragraph/before}{\Needspace{4\baselineskip}}
+
+% Level 5: Keep heading with following content
+\AddToHook{cmd/subparagraph/before}{\Needspace{3\baselineskip}}
