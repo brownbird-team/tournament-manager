@@ -77,11 +77,10 @@
         max-width: 90%;
         margin: 40px auto;
         padding: 30px;
-        background-color: #343F3E;
+        background-color: var(--color-framebg);
         border-radius: 12px;
-        color: rgb(227, 234, 240);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        border: rgba(255, 255, 255, 0.274) 2px solid;
+        border: var(--color-border) 2px solid;
     }
 
     h2 {
@@ -141,13 +140,12 @@
 
     .profile_section p {
         font-size: 13px;
-        color: #aab8b5;
     }
 
     .settings_divider {
         height: 1px;
         width: 100%;
-        background-color: rgba(255, 255, 255, 0.15);
+        background-color: var(--color-border);
         margin: 25px 0;
     }
 
@@ -164,9 +162,9 @@
 
     .setting_field input,
     .setting_field textarea {
-        background-color: #293332;
-        color: white;
-        border: 1px solid #53615e;
+        background-color: var(--color-bg);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
         border-radius: 7px;
         padding: 12px;
         font-family: inherit;
@@ -178,12 +176,12 @@
 
     .setting_field input:focus,
     .setting_field textarea:focus {
-        border-color: #899994;
+        border-color: var(--color-framehover);
     }
 
     .setting_field input::placeholder,
     .setting_field textarea::placeholder {
-        color: #899994;
+        color: var(--color-text);
     }
 
     .save_button {
@@ -192,14 +190,13 @@
         padding: 11px 22px;
         border: none;
         border-radius: 20px;
-        background-color: #71817D;
-        color: white;
+        background-color: var(--color-buttonbg);
         font-weight: 600;
         cursor: pointer;
         transition: background-color 0.2s ease;
     }
 
     .save_button:hover {
-        background-color: #899994;
+        background-color: var(--color-framehover);
     }
 </style>

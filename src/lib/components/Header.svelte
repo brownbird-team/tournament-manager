@@ -1,6 +1,9 @@
 <script lang="ts">
     import logo from '#lib/assets/logoTemporary.svg';
+    import themeLight from '#lib/assets/themeLight.png';
+    import themeDark from '#lib/assets/themeDark.png';
     let searchOrg = $state('');
+    let isThemeLight = $state(false);
 </script>
 
 <svelte:head>
@@ -15,17 +18,22 @@
             Search
         </button>
     </div>
-    <a href="/" class="logo">
-        <img src={logo} alt="Logo" />
-    </a>
+    <div>
+        <button class="theme" onclick={() => {isThemeLight = !isThemeLight; document.documentElement.setAttribute('data-theme', isThemeLight ? 'light' : 'dark')}}>
+            <img src={isThemeLight ? themeLight : themeDark} alt="Theme" />
+        </button>
+        <a href="/" class="logo">
+            <img src={logo} alt="Logo" />
+        </a>
+    </div>
 </header>
 
 <style>
 
 .top_bar{
 		align-self: center;
-		background-color: #3f382d;
-		min-height: 6vh;
+		background-color: var(--color-header);
+		min-height: 75px;
 		display: flex;
         flex-direction: row;
 		justify-content: space-between;
@@ -35,7 +43,24 @@
 	}
 
 .logo{
+    margin-left: 5px;
     margin-right: 10px;
+    max-width: 30px;
+    max-height: 30px;
+}
+
+.theme {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    margin-left: 5px;
+    margin-right: 5px;
+    max-width: 30px;
+    max-height: 30px;
+}
+
+.theme > img {
     max-width: 30px;
     max-height: 30px;
 }
@@ -48,16 +73,16 @@
 .top_bar > p{
     font-weight: 800;
     margin-left: 10px;
-    color: rgb(227, 234, 240);
+    color: var(--color-text);
 }
 
 .search_container {
     display: flex;
     align-items: center;
     width: 35%;
-    height: 80%;
+    height: 100%;
     background-color: rgba(255, 255, 255, 0);
-    border-radius: 25px;
+    border-radius: 15px;
     overflow: hidden;
    
 }
@@ -66,26 +91,27 @@
     flex: 1;
     min-width: 0;
     height: 100%;
-    border: rgba(249, 255, 239, 0.621) solid 0.5px;
+    border: var(--color-border) solid 0.5px;
     outline: none;
-    padding: 0 12px;
-    border-radius: 25px 0 0 25px;
-    background-color: #343f3e00;
-    color: white;
+    padding: 12px 12px 12px 12px;
+    border-radius: 15px 0 0 15px;
+    background-color: transparent;
+    color: var(--color-text);
 }
 
 .search_container button {
     height: 100%;
-    padding: 0 15px;
-    border-radius: 0 25px 25px 0;
-    background-color: #71817D;
-    color: rgb(255, 255, 255);
+    padding: 12px 12px 12px 12px;
+    border-radius: 0 15px 15px 0;
+    background-color: var(--color-headerbutton);
+    color: var(--color-text);
     cursor: pointer;
-    border: rgba(249, 255, 239, 0.646) solid 0.5px;
+    border: var(--color-border) solid 0.5px;
+    transition: background-color 0.2s ease;
 }
 
 .search_container button:hover {
-    background-color: #899994;
+    background-color: var(--color-framehover);
 }
 
 </style>

@@ -23,7 +23,6 @@
 
 <style>
     .user_container{
-        background-color: rgb(255, 209, 180);
         display: flex;
     }
 </style>

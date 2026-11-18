@@ -69,7 +69,7 @@
     align-items: center;
     gap: 2rem;
     padding: 1rem;
-    background-color: burlywood;
+    background-color: var(--color-framebg);
     border-radius: 8px;
 }
 
@@ -84,8 +84,7 @@
 
     overflow: hidden;
     border-radius: 50%;
-    border: 2px rgb(246, 225, 156) solid;
-    background-color: brown;
+    border: 2px var(--color-border) solid;
 }
 
 .profile_picture img {
@@ -143,7 +142,7 @@
     width: 60%;
     margin: 0.2rem 0;
     border: 0;
-    border-top: 1px solid #98583D;
+    border-top: 1px solid var(--color-text);
 }
 
 .desc p {
@@ -179,10 +178,10 @@
     margin: 0;
     padding: 0.15rem 0.5rem;
     border-radius: 6px;
-    background-color: #b17857;
+    background-color: var(--color-bg);
     font-weight: 700;
     font-size: 0.9rem;
-    border: rgb(255, 228, 171) solid 1px;
+    border: var(--color-border) solid 1px;
 }
 
 /* ORGANIZACIJE I TURNIRI */
@@ -198,8 +197,8 @@
 /* ORGANIZACIJE */
 
 .list_organizations {
-    background-color: rgba(232, 184, 116, 0.428);
-    border: 1px rgb(255, 211, 168) solid;
+    background-color: var(--color-framebghalf);
+    border: 1px var(--color-border) solid;
     border-radius: 7px;
     padding: 1rem;
     min-height: 220px;
@@ -225,7 +224,7 @@
     font-size: 2rem;
     font-weight: 800;
     text-decoration: none;
-    color: #9c4a2c;
+    color: var(--color-text);
 }
 
 .orgFlex1 a:hover {
@@ -236,7 +235,7 @@
     grid-column: 1 / -1;
     width: 100%;
     border: 0;
-    border-top: 1px solid #000000;
+    border-top: 1px solid var(--color-text);
     margin: 0.5rem 0 1rem;
 }
 
@@ -250,8 +249,8 @@
 /* TURNIRI */
 
 .tournaments {
-    background-color: rgba(232, 184, 116, 0.428);
-    border: 1px rgb(255, 211, 168) solid;
+    background-color: var(--color-framebghalf);
+    border: 1px var(--color-border) solid;
     border-radius: 7px;
     padding: 1rem;
     min-width: 0;
@@ -259,7 +258,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.8rem;
-    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease; 
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .tournaments > p {
@@ -273,7 +272,7 @@
 .list_organizations:hover,
 .tournaments:hover {
     transform: translateY(-4px);
-    background-color: #f2c898;
+    background-color: var(--color-framehover);
     box-shadow: 0 5px 12px rgba(73, 51, 38, 0.15);
 }
 

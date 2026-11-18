@@ -1,6 +1,7 @@
 <script lang="ts">
 
 	import Header from '#lib/components/Header.svelte';
+	import "#lib/components/layout.css"
 	import type { LayoutProps } from './$types';
 	import logo from '#lib/assets/logoTemporary.svg'
 	let { children }: LayoutProps = $props();
@@ -22,15 +23,15 @@
 	@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 	:global(body) {
-    margin: 0;
-	font-family: 'Inter', sans-serif;
-	background-color: #F3E8D8;
-}
+		margin: 0;
+		font-family: 'Inter', sans-serif;
+		background-color: (--color-bg);
+	}
 
 	.app_container {
         display: flex;
         flex-direction: column;
-		background-color: #C58B68; 
+		background-color: var(--color-bg); 
 		min-width: 100%;
 		min-height: 100vh;
 		justify-content: flex-start;
