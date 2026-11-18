@@ -1,19 +1,77 @@
 
 <script lang="ts">
-    import profilePic from '#lib/assets/profileLogo/squid.png';
-    let username = $state('BrownBirdUser');
-    let bio = $state('Tell us something about yourself...');
+    import { goto } from '$app/navigation';
+    import type { UserData } from '../../../lib/types';
+    import photoProfile from '#lib/assets/photo.svg';
+    let { data }: { data: { userData: UserData } } = $props();
+    let userData = $derived(data.userData)
 
-    function changeProfileImage(event: Event) {
-        const file = (event.currentTarget as HTMLInputElement).files?.[0];
+    //current username and desc
+    let username = $derived(userData.username);
+    let bio = $derived(userData.desc ?? '');
+
+    //current profile pic
+    let profilePic = $derived(userData.profilePic);
+
+    // new profile pic
+    let selectedImage = $derived<File | null>(null);
+
+    let errorMessage = $derived('');
+
+    const MAX_USERNAME_LENGTH = 20;
+    const MIN_USERNAME_LENGTH = 3;
+    const MAX_BIO_LENGTH = 160;
+
+    let previousImageUrl: string | null = null;
+
+    async function changeProfileImage(event: Event) {
+        const input = event.currentTarget as HTMLInputElement;
+        const file = input.files?.[0];
+
+        if (!file) return;
+
+        errorMessage = '';
+
+        // Provjera formata
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+        if (!allowedTypes.includes(file.type)) {
+            errorMessage = 'Please use a PNG, JPEG or WEBP picture format';
+            input.value = '';
+            return;
+        }
+
+        // new pic showcase
+        if (previousImageUrl) {
+            URL.revokeObjectURL(previousImageUrl);
+        }
+
+        previousImageUrl = URL.createObjectURL(file);
+
+        profilePic = previousImageUrl;
+        selectedImage = file;
+
+        
     }
 
-    function saveSettings() {
-        console.log({
-            username,
-            bio,
-            profilePic
-        });
+    async function saveSettings() {
+        errorMessage = '';
+
+        const cleanUsername = username.trim();
+
+        if (cleanUsername.length < MIN_USERNAME_LENGTH || cleanUsername.length > MAX_USERNAME_LENGTH) {
+            errorMessage = 'Username has to be between 3 and 20 characters';
+            return;
+        }
+
+        if (bio.length > MAX_BIO_LENGTH) {
+            errorMessage = 'Please limit your thoughts to only 160 characters';
+            return;
+        }
+
+        // ROKOOO TU TREBAM SLAT SERVEZRZZZZ
+
+        await goto('/me');
     }
 </script>
 
@@ -21,20 +79,14 @@
     <h2>User Settings</h2>
     <div class="profile_section">
         <label class="avatar_upload">
-            <img src={profilePic} alt="Profile picture" />
-
+            <img src={profilePic} alt="User profile" />
             <div class="avatar_overlay">
-                <svg viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14 5h-4L8 8H4v11h16V8h-4z" />
-                    <circle cx="12" cy="13" r="3" />
-                </svg>
+                 <img src={photoProfile} alt="Change profile pic" />
             </div>
 
             <input
                 type="file"
-                accept="image/*"
+                accept="image/png,image/jpeg,image/webp"
                 onchange={changeProfileImage}
             />
         </label>
@@ -51,7 +103,11 @@
             type="text"
             bind:value={username}
             placeholder="Enter username"
+            minlength="3"
+            maxlength="20"
+            required
         />
+        <small>{username.length}/20</small>
     </div>
 
     <div class="settings_divider"></div>
@@ -62,9 +118,15 @@
             id="bio"
             bind:value={bio}
             placeholder="What are you all about?"
+            maxlength="160"
             rows="4"
         ></textarea>
+        <small>{bio.length}/160</small>
     </div>
+
+    {#if errorMessage}
+        <p class="error_message">{errorMessage}</p>
+    {/if}
 
     <button class="save_button" onclick={saveSettings}>
         Save changes
@@ -104,6 +166,7 @@
         border-radius: 50%;
         cursor: pointer;
         overflow: hidden;
+        border: rgb(184, 159, 159) 2px solid;
     }
 
     .avatar_upload img {
@@ -124,10 +187,9 @@
         transition: opacity 0.2s ease;
     }
 
-    .avatar_overlay svg {
+    .avatar_overlay img {
         width: 35px;
         height: 35px;
-        color: white;
     }
 
     .avatar_upload:hover .avatar_overlay {

@@ -1,26 +1,27 @@
 
 <script lang='ts'>
     import settings from '#lib/assets/settingsButton.svg';
-    import profilePic from '#lib/assets/profileLogo/squid.png';
+    let { data } = $props()
+    let userData = $derived(data.userData);
 </script>
 
 <div class="user_container">
     <div class="user_info_container">
-        <div class="profile_picture"><img src={profilePic} alt=""></div>
+        <div class="profile_picture"><img src={userData.profilePic} alt=""></div>
         <div class="user_info">
             <div class="name_settings">
-                <p>LonelyNoodles</p>
+                <p>{userData.username}</p>
                 <a href="/me/settings" class="settingsImage"><img src={settings} alt="settings button icon"></a>
             </div>
             <hr>
             
-            <div class="desc"><p>I am a sandwitch</p></div>
+            <div class="desc"><p>{userData.desc}</p></div>
             <div class="linked_services">
                 <p>Linked services</p>
                 <div class="linkedServicesList">
-                    <p>Discord</p>
-                    <p>tetr.io</p>
-                    <p>Epic Games</p>
+                   {#each userData.linkedServices as service}
+                        <p>{service}</p>
+                    {/each}
                 </div>
             </div>
         </div>
@@ -32,8 +33,9 @@
                 <a href="/settings">+</a>
                 <hr>
             </div>
-            <p>Awesome Chess</p>
-            <p>Bad Chess</p>
+            {#each userData.organizations as org}
+                <p>{org}</p>
+            {/each}
         </div>
         <div class="tournaments">
             <p>Upcoming tournaments</p>
