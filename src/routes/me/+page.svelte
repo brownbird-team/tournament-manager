@@ -1,5 +1,5 @@
 
-<script>
+<script lang='ts'>
     import settings from '#lib/assets/settingsButton.svg';
     import profilePic from '#lib/assets/profileLogo/squid.png';
 </script>
@@ -45,7 +45,7 @@
 
 <style>
     
-/* Osnovno podešavanje svih elemenata */
+/* GENERALNO */
 * {
     box-sizing: border-box;
 }
@@ -83,7 +83,7 @@
     justify-content: center;
 
     overflow: hidden;
-    border-radius: 25%;
+    border-radius: 50%;
     border: 2px rgb(246, 225, 156) solid;
     background-color: brown;
 }
@@ -95,7 +95,7 @@
     object-fit: cover;
 }
 
-/* INFORMACIJE O KORISNIKU */
+/* INFO O KORISNIKU */
 
 .user_info {
     flex: 1;
@@ -147,8 +147,11 @@
 }
 
 .desc p {
-    margin: 0.2rem 0;
+    margin: 0rem 0;
     overflow-wrap: anywhere;
+    font-family:Arial, Helvetica, sans-serif;
+    margin-bottom: 0.8rem;
+    
 }
 
 /* POVEZANE USLUGE */
@@ -157,8 +160,8 @@
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
+    font-weight: bold;
 }
-
 .linked_services > p {
     margin: 0;
 }
@@ -170,6 +173,8 @@
     gap: 0.5rem;
 }
 
+
+
 .linkedServicesList p {
     margin: 0;
     padding: 0.15rem 0.5rem;
@@ -177,7 +182,7 @@
     background-color: #b17857;
     font-weight: 700;
     font-size: 0.9rem;
-    border: rgb(255, 220, 63) solid 1px;
+    border: rgb(255, 228, 171) solid 1px;
 }
 
 /* ORGANIZACIJE I TURNIRI */
@@ -199,6 +204,7 @@
     padding: 1rem;
     min-height: 220px;
     min-width: 0;
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .orgFlex1 {
@@ -219,7 +225,7 @@
     font-size: 2rem;
     font-weight: 800;
     text-decoration: none;
-    color: #eed46c;
+    color: #9c4a2c;
 }
 
 .orgFlex1 a:hover {
@@ -253,6 +259,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.8rem;
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease; 
 }
 
 .tournaments > p {
@@ -260,6 +267,14 @@
     font-weight: 800;
     margin: 0 0 0.2rem;
     overflow-wrap: anywhere;
+    text-align: center;
+}
+
+.list_organizations:hover,
+.tournaments:hover {
+    transform: translateY(-4px);
+    background-color: #f2c898;
+    box-shadow: 0 5px 12px rgba(73, 51, 38, 0.15);
 }
 
 /* PRILAGODBA MANJIM EKRANIMA */
