@@ -17,12 +17,7 @@
 
 .top_bar{
 		align-self: center;
-		margin-top: 3px;
-		margin-left: 3px;
-		margin-right: 4px;
-		border-radius: 10px;
-		border: rgb(255, 203, 47) 2px solid;
-		background-color: rgb(153, 100, 79);
+		background-color: #343F3E;
 		height: 6vh;
 		display: flex;
         flex-direction: row;
@@ -43,9 +38,10 @@
 }
 
 .top_bar > p{
+    font-weight: 800;
     margin-left: 10px;
-    color: aliceblue;
+    color: rgb(227, 234, 240);
 }
 
-
+/* ctrlz na kraju do početka da Jaran ne bude ljuta*/
 </style>
