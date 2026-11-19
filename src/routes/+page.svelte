@@ -4,8 +4,8 @@
     <div class="banner">
         <img src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=1600" alt="baner fertris">
         <div class="banner_text">
-            <h1>Welcome to [name]</h1>
-            <p>powered by BrownBird Organization</p>
+            <h1>Welcome to Tournament Manager</h1>
+            <p>powered by BrownBird Team</p>
         </div>
     </div>
 
@@ -33,8 +33,8 @@
 
     .banner{
         position: relative;
-        height: 300px;
-        width: 80%;
+        height: 350px;
+        width: 100%;
         overflow: hidden;
         border-radius: 10px;
     }
@@ -53,6 +53,7 @@
         font-weight: bolder;
         transform: translate(-50%, -50%);
         background-color: transparent;
+        width: 90%;
     }
 
     .login{
@@ -80,6 +81,36 @@
     }
     .login_button:hover{
         background-color: rgb(176, 106, 62);
+    }
+
+    @media (max-width: 600px){
+        .homepage_container{
+            margin-left: 4%;
+            margin-right: 4%;
+            gap: 20px;
+        }
+        .banner{
+            width: 99%;
+            height: 200px;
+        }
+        .banner_text {
+            width: 90%;
+        }
+        .banner_text h1{
+            font-size: 25px;
+        }
+        .banner_text p{
+            font-size: 15px;
+        }
+        .login h2{
+            font-size: 21px;
+        }
+        .login p{
+            font-size: 15px;
+        }
+        .login_button{
+            padding: 12px 40px;
+        }
     }
 
 </style>
