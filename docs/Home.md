@@ -34,10 +34,13 @@ Roko Dobovičnik - dokumentacija, backend
 
 | Stranica | Svrha |
 | --- | --- |
-| [1. Opseg projekta](01-projekt.md) | Problem, cilj i granice projekta |
+| [1. Opseg projekta](01_projekt.md) | Problem, cilj i granice projekta |
 | [2. Analiza zahtjeva](02_analiza_zahtjeva.md) | Zahtjevi, ograničenja i sljedivost |
 | [3. Obrasci uporabe](03_obrasci_uporabe.md) | Akteri i reprezentativne interakcije korisnika |
 | [4. Arhitektura i oblikovanje](04_arhitektura_i_oblikovanje.md) | Glavne odluke oblikovanja, struktura, podaci i ponašanje |
+| [5. Ispitivanje](05_ispitivanje.md) | Pristup ispitivanju, ispitni slučajevi i rezultati |
+| [6. Postavljanje, instalacija i konfiguracija](06_postavljanje_instalacija_i_konfiguracija.md) | Lokalna instalacija, razmještaj i administracija |
+| [7. Zaključak i budući rad](07_zakljucak_i_buduci_rad.md) | Rezultati projekta, naučene lekcije i budući rad |
 
 ## Ključne točke projekta
 

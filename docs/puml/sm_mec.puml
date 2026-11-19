@@ -1,0 +1,45 @@
+' ================================================================
+' BrownBird Tournament manager
+'
+' Dijagram stanja: životni ciklus meča (nacrt - za pregled tima)
+'
+' Made by BrownBird Team (progi edition)
+' ================================================================
+
+@startuml sm_mec
+title BrownBird Tournament Manager - dijagram stanja meča
+
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam ArrowColor #212529
+
+skinparam state {
+    BackgroundColor #E7F1FF
+    BorderColor #0D6EFD
+}
+
+[*] --> Zakazan : generiranje runde
+
+state "Zakazan" as Zakazan
+state "U tijeku" as UTijeku
+state "Rezultat prijavljen" as Prijavljen
+state "Sporan" as Sporan
+state "Završen" as Zavrsen
+
+Zakazan : meč postoji, chat još nije aktivan
+UTijeku : chat otvoren, natjecatelji igraju
+Prijavljen : barem jedan natjecatelj je unio rezultat
+Sporan : prijavljeni rezultati se ne slažu\n(alert za organizatora)
+Zavrsen : rezultat i pobjednik pohranjeni,\nchat zaključan
+
+Zakazan --> UTijeku : početak meča
+UTijeku --> Prijavljen : natjecatelj unosi rezultat
+Prijavljen --> Zavrsen : rezultati se slažu
+Prijavljen --> Sporan : rezultati se ne slažu
+Sporan --> Zavrsen : organizator unosi konačni rezultat
+UTijeku --> Zavrsen : organizator ili bot unosi rezultat
+Zakazan --> Zavrsen : natjecatelj izlazi iz turnira /\nbude izbačen (protivnik prolazi)
+
+Zavrsen --> [*]
+
+@enduml

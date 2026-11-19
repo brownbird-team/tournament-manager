@@ -1,0 +1,128 @@
+' ================================================================
+' BrownBird Tournament manager
+'
+' Reprezentativni dijagram razreda: sustav pluginova
+' (nacrt prema grani rdobovic/plugins - za pregled tima)
+'
+' Made by BrownBird Team (progi edition)
+' ================================================================
+
+@startuml cd_plugin
+title BrownBird Tournament Manager - dijagram razreda (sustav pluginova)
+left to right direction
+
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam packageStyle rectangle
+skinparam ArrowColor #212529
+
+skinparam class {
+    BackgroundColor #E7F1FF
+    BorderColor #0D6EFD
+}
+
+skinparam interface {
+    BackgroundColor #FFF3CD
+    BorderColor #212529
+}
+
+skinparam enum {
+    BackgroundColor #F8F9FA
+    BorderColor #212529
+}
+
+package "Pluginovi (poslužitelj)" {
+    interface Plugin {
+        +title: string
+        +userTypeId: string
+        +widgets: Record<string, WidgetHandler>
+        +hooks.authSetup(): AuthPluginConfig
+        +hooks.authRequest(auth): PluginUserRecord
+        +hooks.authRefresh?(auth, user): PluginUserRecord
+    }
+
+    class PluginWrapper {
+        -plugin: Plugin
+        -widgetIdSet: Set<string>
+        +hasWidget(wId): boolean
+        +prepareWidget(wId, userRaw): WidgetPackRenderSpec
+        +handleAuthSetup(): AuthPluginConfig
+        +handleAuthRequest(auth): PluginUserRecord
+        +handleAuthRefresh(auth, userRaw): PluginUserRecord
+        -parseUserRecord(userRaw): PluginUserRecord
+    }
+
+    interface PluginRegistry {
+        +hasPlugin(pId): boolean
+        +getPluginList(): string[]
+        +getPlugin(pId): PluginWrapper
+        +getWidgetList(area, plugins?): WidgetIdentifier[]
+        +prepareWidgets(widgets, user): WidgetRenderSpec[]
+    }
+
+    interface WidgetHandler {
+        +title: string
+        +area: WidgetArea
+        +prepare(user?): props
+    }
+
+    class PluginUserRecord {
+        +uniqueId: string
+        +userTypeId: string
+        +data: U
+    }
+
+    class AuthPluginConfig {
+        +server: string
+        +clientId: string
+        +clientSecret: string
+        +scope: string[]
+    }
+
+    class AuthPluginRequest {
+        +userInfo: UserInfoResponse
+        +fetch(url, options?): Promise<Response>
+    }
+
+    enum WidgetArea {
+        login
+        bracket
+        matches
+        profile
+        connections
+    }
+}
+
+package "Pluginovi (klijent)" {
+    class WidgetPack {
+        +widgets: Record<string, Component>
+        +has(key): boolean
+    }
+
+    class WidgetRegistry {
+        +packs: Record<string, WidgetPack>
+        +has(key): boolean
+        +resolve(spec): WidgetRenderable
+    }
+
+    class WidgetRenderSpec <<backend → frontend>> {
+        +pId: string
+        +wId: string
+        +props: object
+    }
+}
+
+PluginRegistry "1" o-- "0..*" PluginWrapper : registrira
+PluginWrapper "1" *-- "1" Plugin : omata
+Plugin "1" *-- "0..*" WidgetHandler : widgets
+Plugin ..> AuthPluginConfig : authSetup
+Plugin ..> AuthPluginRequest : authRequest
+Plugin ..> PluginUserRecord : vraća
+WidgetHandler --> WidgetArea : area
+
+PluginRegistry ..> WidgetRenderSpec : prepareWidgets
+WidgetRegistry "1" o-- "0..*" WidgetPack : packs
+WidgetRegistry ..> WidgetRenderSpec : resolve
+PluginRegistry ..> WidgetRegistry : koristi popis widgeta
+
+@enduml

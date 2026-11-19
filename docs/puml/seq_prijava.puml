@@ -1,0 +1,71 @@
+' ================================================================
+' BrownBird Tournament manager
+'
+' Sekvencijski dijagram: prijava putem plugina (UC-01, UC-02)
+'
+' Made by BrownBird Team (progi edition)
+' ================================================================
+
+@startuml seq_prijava
+title BrownBird Tournament Manager - prijava u sustav putem plugina (UC-01, UC-02)
+
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam ArrowColor #212529
+skinparam sequence {
+    ParticipantBackgroundColor #E7F1FF
+    ParticipantBorderColor #0D6EFD
+    LifeLineBorderColor #212529
+}
+
+actor "Posjetitelj" as V
+participant "Web klijent" as Web
+participant "Korisnički API" as API
+participant "Upravitelj korisnicima" as UM
+participant "Plugin\n(autentifikacija)" as Plugin
+participant "Pružatelj identiteta\n(vanjski)" as Idp
+database "PostgreSQL" as DB
+
+V -> Web : odabire pružatelja (Steam, tetr.io)
+Web -> API : zahtjev za prijavu (id plugina)
+API -> UM : pokreni prijavu
+UM -> Plugin : authSetup()
+Plugin --> UM : AuthPluginConfig\n(server, clientId, scope)
+UM --> Web : preusmjeravanje na pružatelja
+Web -> Idp : zahtjev za autorizaciju (OAuth2)
+V -> Idp : provodi korake autentifikacije
+
+alt pružatelj nedostupan
+    Idp --> Web : pogreška / bez odgovora
+    Web --> V : poruka da pokuša kasnije
+else autentifikacija uspješna
+    Idp --> Web : preusmjeravanje natrag s autorizacijskim kodom
+    Web -> API : povratni poziv (kod)
+    API -> UM : dovrši prijavu (kod)
+    UM -> Idp : razmjena koda, dohvat podataka o korisniku
+    Idp --> UM : userInfo
+    UM -> Plugin : authRequest(userInfo, fetch)
+    Plugin --> UM : PluginUserRecord\n(uniqueId, userTypeId, data)
+    UM -> DB : traži korisnika povezanog s pluginom
+
+    alt korisnik ne postoji
+        UM --> Web : zatraži korisničko ime
+        loop dok korisničko ime nije valjano
+            V -> Web : unosi korisničko ime
+            Web -> API : korisničko ime
+            API -> UM : provjeri i spremi korisničko ime
+            UM -> DB : provjera jedinstvenosti
+            alt korisničko ime zauzeto
+                UM --> Web : pogreška, traži novo ime
+            end
+        end
+        UM -> DB : spremi korisnika i podatke plugina
+    end
+
+    UM -> DB : stvori sjednicu
+    UM --> API : sjednica
+    API --> Web : sjednica
+    Web --> V : preusmjeravanje na dashboard
+end
+
+@enduml
