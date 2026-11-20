@@ -29,4 +29,4 @@
 
 ## Reprezentativni UML dijagram razreda
 
-U procesu izrade...
+![](assets/puml/cd.png)

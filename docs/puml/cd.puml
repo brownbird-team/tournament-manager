@@ -1,0 +1,303 @@
+@startuml TournamentManagerSimple
+' Simplified high-level class diagram for the Tournament Manager.
+left to right direction
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam classBackgroundColor #F8FAFC
+skinparam classBorderColor #64748B
+skinparam ArrowColor #64748B
+skinparam packageBorderColor #94A3B8
+skinparam packageFontColor #334155
+hide empty methods
+hide circle
+
+' ========================= DOMAIN =========================
+package "Domain" {
+  package "Accounts & organizations" {
+    class User <<entity>> {
+      +id: UUID
+      +username: String
+      +bio: Text
+      +profileImage: String
+    }
+
+    class UserSession <<entity>> {
+      +sessionToken: String
+      +createdAt: DateTime
+    }
+
+    class UserAuth <<entity>> {
+      +pluginId: String
+      +pluginData: JSON
+    }
+
+    class Organization <<entity>> {
+      +id: UUID
+      +slug: String
+      +description: Text
+    }
+
+    class OrganizationOwner <<association>>
+  }
+
+  package "Tournament" {
+    class Tournament <<entity>> {
+      +id: Integer
+      +name: String
+      +slug: String
+      +rules: Text
+      +description: Text
+      +startTime: DateTime
+    }
+
+    class InitGroup <<entity>>
+
+    class Participant <<entity>> {
+      +id: Integer
+      +archivedData: JSON
+    }
+
+    class Stage <<entity>> {
+      +id: Integer
+      +stageType: String
+      +matchmakingType: String
+      +matchmakingData: JSON
+    }
+
+    class TournamentGroup <<entity>> {
+      +id: Integer
+      +slug: String
+      +currentRound: Integer
+    }
+
+    class Round <<entity>> {
+      +roundId: Integer
+    }
+
+    class GroupParticipant <<association>> {
+      +matchmakingData: JSON
+      +position: Integer
+    }
+
+    class Match <<entity>> {
+      +matchId: Integer
+      +scoreP1: Integer
+      +scoreP2: Integer
+      +winnerId: Integer
+      +status: String
+      +alert: Boolean
+    }
+  }
+
+  package "Chat" {
+    class Chat <<entity>>
+    class Message <<entity>> {
+      +id: Integer
+      +authorType: String
+      +body: Text
+    }
+  }
+}
+
+' ========================= SERVICES =========================
+package "Services" {
+  class AuthService <<service>> {
+    +authenticate(pluginId, request): AuthResult
+    +refreshSession(userId, sessionToken)
+    +logout(userId, sessionToken)
+  }
+
+  class UserService <<service>> {
+    +updateProfile(userId, profile)
+    +setProfileImage(userId, image)
+  }
+
+  class OrganizationService <<service>> {
+    +createOrganization(ownerId, data)
+    +manageOwners(organizationId)
+  }
+
+  class TournamentService <<service>> {
+    +createTournament(organizationId, data)
+    +manageStages(tournamentId)
+    +manageGroups(tournamentId)
+    +manageParticipants(tournamentId)
+  }
+
+  class MatchService <<service>> {
+    +createMatch(groupId, roundId, player1Id, player2Id)
+    +submitResult(matchId, scores)
+    +resolveResult(matchId)
+  }
+
+  class ChatService <<service>> {
+    +createChat()
+    +postMessage(chatId, message)
+    +getMessages(chatId)
+  }
+}
+
+' ========================= REPOSITORIES =========================
+package "Repositories" {
+  interface UserRepository <<repository>> {
+    +findById(userId)
+    +findByUsername(username)
+    +save(user)
+    +saveSession(session)
+    +saveAuth(auth)
+  }
+
+  interface OrganizationRepository <<repository>> {
+    +findById(organizationId)
+    +findBySlug(slug)
+    +save(organization)
+    +saveOwner(owner)
+  }
+
+  interface TournamentRepository <<repository>> {
+    +findById(tournamentId)
+    +save(tournament)
+    +saveStage(stage)
+    +saveGroup(group)
+    +saveRound(round)
+    +saveInitGroup(initGroup)
+  }
+
+  interface ParticipantRepository <<repository>> {
+    +findById(participantId)
+    +save(participant)
+    +saveGroupMembership(membership)
+  }
+
+  interface MatchRepository <<repository>> {
+    +findById(matchId, groupId)
+    +save(match)
+  }
+
+  interface ChatRepository <<repository>> {
+    +findById(chatId)
+    +save(chat)
+    +saveMessage(message)
+  }
+}
+
+' ========================= PLUGIN AUTHENTICATION =========================
+package "Plugin system" {
+  interface Plugin {
+    +authSetup()
+    +authRequest(request): PluginUserRecord
+    +authRefresh(request, user): PluginUserRecord
+  }
+
+  interface PluginWrapper {
+    +handleAuthSetup()
+    +handleAuthRequest(request): PluginUserRecord
+    +handleAuthRefresh(request, user): PluginUserRecord
+  }
+
+  class PluginWrapperImpl
+  interface PluginRegistry {
+    +hasPlugin(pluginId): Boolean
+    +getPlugin(pluginId): PluginWrapper
+  }
+
+  class PluginRegistryImpl
+
+  class PluginUserRecord <<data>> {
+    +uniqueId: String
+    +userTypeId: String
+    +data: JSON
+  }
+}
+
+' ========================= IMAGE STORAGE =========================
+package "Image handling" {
+  class ImageService <<service>> {
+    +store(originalImage): String
+  }
+}
+
+' ========================= DOMAIN RELATIONSHIPS =========================
+User "1" -- "0..*" UserSession
+User "1" -- "0..*" UserAuth
+User "1" -- "0..*" OrganizationOwner
+Organization "1" -- "0..*" OrganizationOwner
+Organization "1" -- "0..*" Tournament
+
+User "1" -- "0..*" Participant
+Tournament "1" -- "0..*" Participant
+Tournament "1" -- "0..*" InitGroup
+InitGroup "0..1" -- "0..*" Participant : initial group
+Tournament "1" -- "0..*" Stage
+Stage "1" -- "0..*" TournamentGroup
+Tournament "1" -- "0..*" TournamentGroup
+TournamentGroup "1" -- "0..*" Round
+TournamentGroup "1" -- "0..*" GroupParticipant
+Participant "1" -- "0..*" GroupParticipant
+TournamentGroup "1" -- "0..*" Match
+Round "1" -- "0..*" Match
+GroupParticipant "0..1" -- "0..*" Match : player 1
+GroupParticipant "0..1" -- "0..*" Match : player 2
+
+Tournament "1" -- "1" Chat : owner chat
+Match "1" -- "1" Chat : match chat
+Chat "1" *-- "0..*" Message
+User "0..1" -- "0..*" Message : author
+Participant "0..1" -- "0..*" Message : author
+
+' ========================= SERVICE DEPENDENCIES =========================
+AuthService ..> PluginRegistry
+AuthService ..> UserRepository
+UserService ..> UserRepository
+UserService ..> ImageService
+OrganizationService ..> OrganizationRepository
+TournamentService ..> TournamentRepository
+TournamentService ..> ParticipantRepository
+TournamentService ..> OrganizationRepository
+TournamentService ..> ChatService
+MatchService ..> MatchRepository
+MatchService ..> ParticipantRepository
+MatchService ..> ChatService
+ChatService ..> ChatRepository
+
+' ========================= REPOSITORY OWNERSHIP =========================
+UserRepository ..> User
+UserRepository ..> UserSession
+UserRepository ..> UserAuth
+OrganizationRepository ..> Organization
+OrganizationRepository ..> OrganizationOwner
+TournamentRepository ..> Tournament
+TournamentRepository ..> InitGroup
+TournamentRepository ..> Stage
+TournamentRepository ..> TournamentGroup
+TournamentRepository ..> Round
+ParticipantRepository ..> Participant
+ParticipantRepository ..> GroupParticipant
+MatchRepository ..> Match
+ChatRepository ..> Chat
+ChatRepository ..> Message
+
+' ========================= IMPLEMENTATION LINKS =========================
+PluginWrapperImpl ..|> PluginWrapper
+PluginWrapperImpl --> Plugin : wraps
+PluginRegistryImpl ..|> PluginRegistry
+PluginRegistryImpl o-- "1..*" PluginWrapper
+PluginWrapper ..> PluginUserRecord
+Plugin ..> PluginUserRecord
+UserAuth ..> PluginUserRecord : stored plugin data
+
+note bottom of ImageService
+  Izračunava hash slike i provjerava postoji li na disku, ako ne postoji
+  pretvara i smanjuje sliku u prikladan format i pohranjuje ju na disku
+end note
+
+note bottom of Match
+  Meč i runda povezani su sa pojedinim grupama, svaka grupa je zaseban ždrijeb.
+end note
+
+@enduml
