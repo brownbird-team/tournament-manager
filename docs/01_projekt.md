@@ -15,3 +15,16 @@ Ključne značajke BrownBird Tournament Manager sustava su:
 - Interaktivno iskustvo korisnika: Pruža komunikaciju u stvarnom vremenu putem web chata tijekom mečeva te jednostavan sustav za prijavu rezultata.
 
 - Programski pristup (Bot API): Omogućuje vanjskim aplikacijama i alatima automatsko upravljanje turnirima putem API tokena.
+
+
+## Članovi tima i raspodjela poslova
+
+| Ime i prezime | Zaduženja |
+|---|---|
+| Borna Flinta | dokumentacija, backend, baza |
+| Dora Maranić | frontend, tester |
+| Dorotea Kos | dokumentacija, frontend |
+| Lucija Jaran | frontend, tester |
+| Oliver Stanković | dokumentacija, frontend |
+| Patrik Pavić | dokumentacija, backend |
+| Roko Dobovičnik | dokumentacija, backend, baza |
