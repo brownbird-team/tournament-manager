@@ -1,5 +1,6 @@
 pandoc docs/??_*.md \
     --toc \
+    --toc-depth=2 \
     --number-sections \
     --resource-path=docs \
     --metadata=tables-vrules \
