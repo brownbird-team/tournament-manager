@@ -1,7 +1,5 @@
 # Arhitektura i oblikovanje
 
-[Primjeri](https://github.com/VladoSruk/Programsko-inzenjerstvo/blob/main/docs/4-Arhitektura-i-oblikovanje.md)
-
 ## Ključne arhitekturne odluke
 | Odluka | Razmatrana alternativa | Projektno specifično obrazloženje i kompromis |
 | --- | --- | --- |

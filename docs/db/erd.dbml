@@ -2,27 +2,49 @@
 // Users and organizations
 // ----------------------------------------------------------
 
+Table oauth_request {
+  challenge text
+  verifier text
+  nonce text
+}
+
 Table user {
-  user_id int [primary key]
+  user_id uuid [primary key]
   username varchar [unique, not null]
   bio text
+  profileImage text
 }
 
 Table user_session {
-  user_id int
-  token text
+  user_id uuid
+  session_token text
+
+  oauth_access_token text
+  oauth_refresh_token text
+  oauth_access_expires timestamp
+  oauth_refresh_expires timestamp
+
+  session_started timestamp
+
+  created_at timestamp
 
   indexes {
-    (user_id, token) [pk]
+    (user_id, session_token) [pk]
   }
 }
 
 Ref: user_session.user_id > user.user_id
 
 Table user_auth {
-  user_id int
+  user_id uuid
   plugin_id varchar
-  auth_data json [not null]
+  
+  plugin_data json [not null]
+
+  oauth_access_token text
+  oauth_refresh_token text
+  oauth_access_expires timestamp
+  oauth_refresh_expires timestamp
 
   indexes {
     (user_id, plugin_id) [pk]
@@ -32,15 +54,15 @@ Table user_auth {
 Ref: user_auth.user_id > user.user_id
 
 Table organization {
-  org_id int [primary key]
+  org_id uuid [primary key]
   slug varchar [unique, not null]
   description text
   api_token text
 }
 
 Table organization_owner {
-  org_id int
-  user_id int
+  org_id uuid
+  user_id uuid
 
   indexes {
     (org_id, user_id) [pk]
