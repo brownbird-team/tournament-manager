@@ -1,4 +1,4 @@
-@startuml TournamentManagerSimple
+@startuml cd
 ' Simplified high-level class diagram for the Tournament Manager.
 left to right direction
 skinparam backgroundColor white
