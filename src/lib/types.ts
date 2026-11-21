@@ -8,4 +8,3 @@ export interface UserData {
     organizations: string[];
     tournaments: string[];
 }
-
