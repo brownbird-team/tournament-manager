@@ -23,7 +23,8 @@
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "drizzle-kit migrate",
 		"db:studio": "drizzle-kit studio",
-		"build:docs": "bash docs/build.sh"
+		"build:docs": "bash scripts/build-docs.sh",
+		"dev:db": "bash scripts/run-dev-db-podman.sh"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-node": "^6.0.0",

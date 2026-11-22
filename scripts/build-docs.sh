@@ -1,3 +1,5 @@
+#!/bin/bash
+
 pandoc docs/??_*.md \
     --toc \
     --toc-depth=2 \
