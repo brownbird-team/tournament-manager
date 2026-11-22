@@ -1,4 +1,4 @@
-import { genToken, genUUID } from '#lib/server/utils.ts';
+import { genToken, genUUID } from '#lib/server/utils/generators.ts';
 
 export interface OrganizationCreateProps {
     slug: string;

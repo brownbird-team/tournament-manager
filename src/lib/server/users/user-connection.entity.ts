@@ -1,10 +1,10 @@
-import { OAuthTokenPair } from "#lib/auth/token.ts";
 import type { PluginUserRecordRaw } from "#lib/plugins/plugin-user.ts";
+import type { OAuthUserData } from "../auth/oauth-user-data";
 
 export interface UserConnectionCreateProps {
     userId: string,
     pluginId: string,
-    oauth: OAuthTokenPair,
+    oauth: OAuthUserData,
     pluginData: PluginUserRecordRaw,
 }
 
@@ -12,7 +12,7 @@ export class UserConnection {
     constructor(
         public readonly userId: string,
         public readonly pluginId: string,
-        public oauth: OAuthTokenPair,
+        public oauth: OAuthUserData,
         public pluginData: PluginUserRecordRaw,
         public readonly createdAt: Date,
     ) {}

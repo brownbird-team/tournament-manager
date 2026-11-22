@@ -1,15 +1,14 @@
 import type { Database } from "../db/types";
 import * as schema from '#lib/server/db/schema.ts';
-import { UserConnection } from "../entities/user-connection";
-import { OAuthTokenPair } from "#lib/auth/token.ts";
+import { UserConnection } from "./user-connection.entity";
 import type { PluginUserRecordRaw } from "#lib/plugins/plugin-user.ts";
 import { and, eq } from "drizzle-orm";
-import type { User } from "../entities/user";
+import type { User } from "./user.entity";
+import { OAuthUserData } from "../auth/oauth-user-data";
 
 class UserConnectionMapper {
     static toEntity(data: typeof schema.userConn.$inferSelect): UserConnection {
         const pluginUserData: PluginUserRecordRaw = {
-            uniqueId: data.pluginUserId,
             data: data.pluginData,
             userTypeId: data.pluginDataTypeId,
         }
@@ -17,7 +16,12 @@ class UserConnectionMapper {
         return new UserConnection(
             data.userId,
             data.pluginId,
-            OAuthTokenPair.fromFlat(data),
+            new OAuthUserData(
+                data.oAuthSub,
+                data.oAuthAccessToken,
+                data.oAuthExpiresAt ?? undefined,
+                data.oAuthRefreshToken ?? undefined,
+            ),
             pluginUserData,
             data.createdAt,
         );
@@ -27,12 +31,13 @@ class UserConnectionMapper {
         return {
             userId: conn.userId,
             pluginId: conn.pluginId,
-            pluginUserId: conn.pluginData.uniqueId,
             pluginData: conn.pluginData.data,
             pluginDataTypeId: conn.pluginData.userTypeId,
             createdAt: conn.createdAt,
-
-            ...conn.oauth.toFlat(),
+            oAuthSub: conn.oauth.sub,
+            oAuthAccessToken: conn.oauth.accessToken,
+            oAuthExpiresAt: conn.oauth.expiresAt,
+            oAuthRefreshToken: conn.oauth.refreshToken,
         };
     }
 }
@@ -69,16 +74,16 @@ export class UserConnectionRepository {
         return res.map(rec => UserConnectionMapper.toEntity(rec));
     }
 
-    async findByPluginUserId(
+    async findByOAuthSub(
         pluginId: string, 
-        pluginUserId: string
+        oAuthSub: string
     ): Promise<UserConnection | null> {
 
         const res = await this.db.select()
             .from(schema.userConn)
             .where(and(
                 eq(schema.userConn.pluginId, pluginId),
-                eq(schema.userConn.pluginUserId, pluginUserId)
+                eq(schema.userConn.oAuthSub, oAuthSub)
             ));
 
         return res.length > 0 ? UserConnectionMapper.toEntity(res[0]) : null;

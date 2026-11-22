@@ -1,4 +1,4 @@
-import { genUUID } from '#lib/server/utils.ts';
+import { genUUID } from '#lib/server/utils/generators.ts';
 
 export interface UserCreateProps {
     username: string,

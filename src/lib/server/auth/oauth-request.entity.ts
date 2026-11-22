@@ -1,4 +1,5 @@
 import * as client from 'openid-client';
+import { OAUTH_REQUEST_LIFETIME } from '$app/env/private'
 
 interface OAuthRequestCreateProps {
     useNonce: boolean;
@@ -11,6 +12,12 @@ export class OAuthRequest {
         public readonly createdAt: Date,
         public readonly nonce?: string,
     ) {}
+
+    valid() {
+        const d = new Date();
+        d.setSeconds(d.getSeconds() - OAUTH_REQUEST_LIFETIME);
+        return this.createdAt > d;
+    }
 
     static async create(data: OAuthRequestCreateProps) {
         const verifier = client.randomPKCECodeVerifier();

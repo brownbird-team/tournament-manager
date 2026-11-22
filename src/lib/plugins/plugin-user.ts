@@ -14,7 +14,6 @@ export type PluginUserTypeId =
  */
 
 export interface PluginUserRecord<U> {
-    uniqueId: string;
     userTypeId: PluginUserTypeId;
     data: U;
 }

@@ -1,6 +1,6 @@
 import type { FetchBody, UserInfoResponse } from "openid-client";
 
-export interface AuthPluginConfig {
+export interface PluginAuthConfig {
     server: string;
     clientId: string;
     clientSecret: string;
@@ -13,11 +13,11 @@ export interface FetchOptions {
     headers?: Headers;
 }
 
-export interface AuthPluginRequest {
+export interface PluginAuthRequest {
     userInfo: UserInfoResponse;
     fetch: (url: URL, options?: FetchOptions) => Promise<Response>;
 }
 
 // If tokens have expired null will be passed since
 // new data cannot be fetched
-export type AuthPluginRefresh = AuthPluginRequest | null;
+export type PluginAuthRefresh = PluginAuthRequest | null;

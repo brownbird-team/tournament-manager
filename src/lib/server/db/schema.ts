@@ -38,8 +38,6 @@ export const userConn = pgTable('user_connection', {
     pluginId: varchar('plugin_id')
         .notNull(),
 
-    pluginUserId: varchar()
-        .notNull(),
     pluginData: json('plugin_data')
         .notNull()
         .$type<unknown>(),
@@ -47,18 +45,18 @@ export const userConn = pgTable('user_connection', {
         .notNull()
         .$type<PluginUserTypeId>(),
 
+    oAuthSub: text('oauth')
+        .notNull(),
     oAuthAccessToken: text('oauth_access_token')
         .notNull(),
-    oAuthAccessExpiresAt: timestamp('oauth_access_expires_at')
-        .notNull(),
+    oAuthExpiresAt: timestamp('oauth_expires_at'),
     oAuthRefreshToken: text('oauth_refresh_token'),
-    oAuthRefreshExpiresAt: timestamp('oauth_refresh_expires_at'),
 
     createdAt: timestamp('created_at')
         .notNull(),
 }, (table) => [
     primaryKey({ columns: [table.userId, table.pluginId] }),
-    unique().on(table.pluginId, table.pluginUserId),
+    unique().on(table.pluginId, table.oAuthSub),
 ]);
 
 export const userSession = pgTable('user_session', {
@@ -69,12 +67,12 @@ export const userSession = pgTable('user_session', {
     pluginId: varchar('plugin_id')
         .notNull(),
 
+    oAuthSub: text('oauth')
+        .notNull(),
     oAuthAccessToken: text('oauth_access_token')
         .notNull(),
-    oAuthAccessExpiresAt: timestamp('oauth_access_expires_at')
-        .notNull(),
+    oAuthExpiresAt: timestamp('oauth_expires_at'),
     oAuthRefreshToken: text('oauth_refresh_token'),
-    oAuthRefreshExpiresAt: timestamp('oauth_refresh_expires_at'),
 
     createdAt: timestamp('created_at')
         .notNull(),

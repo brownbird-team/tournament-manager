@@ -2,10 +2,10 @@ import type { ComponentProps } from "svelte";
 import type { MaybePromise, StringKeys } from "#lib/types.ts";
 
 import type {
-    AuthPluginConfig, 
-    AuthPluginRequest, 
-    AuthPluginRefresh 
-} from "#lib/auth/plugin.ts";
+    PluginAuthConfig, 
+    PluginAuthRequest, 
+    PluginAuthRefresh 
+} from "#lib/plugins/auth.ts";
 
 import type {
     PluginUserRecord,
@@ -40,14 +40,14 @@ export interface Plugin<U, W extends WidgetPackConfig> {
 
     hooks: {
         authSetup:
-            () => AuthPluginConfig;
+            () => PluginAuthConfig;
 
         authRequest: (
-            auth: AuthPluginRequest
+            auth: PluginAuthRequest
         ) => MaybePromise<Omit<PluginUserRecord<U>, 'userTypeId'>>;
 
         authRefresh?: (
-            auth: AuthPluginRefresh,
+            auth: PluginAuthRefresh,
             pluginUser: PluginUserRecord<U>
         ) => MaybePromise<Omit<PluginUserRecord<U>, 'userTypeId'>>;
     };
@@ -71,12 +71,12 @@ export interface PluginWrapper<W extends WidgetPackConfig> {
     ) => WidgetPackRenderSpec<W> | null;
 
     handleAuthSetup: 
-        () => AuthPluginConfig;
+        () => PluginAuthConfig;
     handleAuthRequest:
-        (auth: AuthPluginRequest) => Promise<PluginUserRecordRaw>;
+        (auth: PluginAuthRequest) => Promise<PluginUserRecordRaw>;
 
     handleAuthRefresh: (
-        auth: AuthPluginRefresh, 
+        auth: PluginAuthRefresh, 
         userRaw: PluginUserRecordRaw
     ) => Promise<PluginUserRecordRaw>;
 }

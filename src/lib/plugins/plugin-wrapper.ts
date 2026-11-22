@@ -7,10 +7,10 @@ import type { WidgetPack, WidgetPackConfig, WidgetPackRenderSpec } from './widge
 import type { WidgetArea } from './widget-area';
 
 import type {
-    AuthPluginConfig,
-    AuthPluginRefresh,
-    AuthPluginRequest
-} from '#lib/auth/plugin.ts';
+    PluginAuthConfig,
+    PluginAuthRefresh,
+    PluginAuthRequest
+} from '#lib/plugins/auth.ts';
 
 export class PluginWrapperImpl<
     U, W extends WidgetPackConfig, P extends Plugin<U, W>
@@ -71,18 +71,18 @@ export class PluginWrapperImpl<
         };
     }
 
-    handleAuthSetup(): AuthPluginConfig {
+    handleAuthSetup(): PluginAuthConfig {
         return this.plugin.hooks.authSetup();
     }
 
-    async handleAuthRequest(auth: AuthPluginRequest): Promise<PluginUserRecordRaw> {
+    async handleAuthRequest(auth: PluginAuthRequest): Promise<PluginUserRecordRaw> {
         return {
             ...(await this.plugin.hooks.authRequest(auth)),
             userTypeId: this.plugin.userTypeId,
         };
     }
 
-    async handleAuthRefresh(auth: AuthPluginRefresh, userRaw: PluginUserRecordRaw): Promise<PluginUserRecordRaw> {
+    async handleAuthRefresh(auth: PluginAuthRefresh, userRaw: PluginUserRecordRaw): Promise<PluginUserRecordRaw> {
         const user = this.parseUserRecord(userRaw);
 
         if (!this.plugin.hooks.authRefresh)

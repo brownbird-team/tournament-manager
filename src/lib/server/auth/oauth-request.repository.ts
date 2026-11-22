@@ -1,9 +1,9 @@
 import type { Database } from "../db/types";
-import { OAuthRequest } from "../entities/oauth-request";
+import { OAuthRequest } from "./oauth-request.entity";
 import * as schema from '#lib/server/db/schema.ts';
 import { eq, lt } from "drizzle-orm";
 
-const OAUTH_REQUEST_LIFETIME = 15 * 60; // 15min
+import { OAUTH_REQUEST_LIFETIME } from '$app/env/private';
 
 class OAuthRequestMapper {
     static toEntity(data: typeof schema.oauthRequest.$inferSelect): OAuthRequest {
@@ -50,6 +50,14 @@ export class OAuthRequestRepository {
         const req = await this.db.select()
             .from(schema.oauthRequest)
             .where(eq(schema.oauthRequest.challenge, chal));
+
+        return req.length > 0 ? OAuthRequestMapper.toEntity(req[0]) : null;
+    }
+
+    async findByNonce(nonce: string): Promise<OAuthRequest | null> {
+        const req = await this.db.select()
+            .from(schema.oauthRequest)
+            .where(eq(schema.oauthRequest.nonce, nonce));
 
         return req.length > 0 ? OAuthRequestMapper.toEntity(req[0]) : null;
     }

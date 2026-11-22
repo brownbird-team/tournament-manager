@@ -1,8 +1,8 @@
-import { Organization } from '../entities/organization';
+import { Organization } from './organization.entity';
 import * as schema from '#lib/server/db/schema.ts';
 import type { Database } from "#lib/server/db/types.ts";
 import { and, eq } from 'drizzle-orm';
-import type { User } from '../entities/user';
+import type { User } from '../users/user.entity';
 
 
 class OrganizationMapper {

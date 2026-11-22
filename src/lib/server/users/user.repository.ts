@@ -1,7 +1,7 @@
 import * as schema from '#lib/server/db/schema.ts';
 import type { Database } from '#lib/server/db/types.ts';
 import { eq } from 'drizzle-orm';
-import { User } from '../entities/user';
+import { User } from './user.entity';
 
 class UserMapper {
     static toEntity(data: typeof schema.user.$inferSelect): User {

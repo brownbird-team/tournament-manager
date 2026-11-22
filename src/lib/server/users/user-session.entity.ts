@@ -1,10 +1,10 @@
-import { genToken } from '#lib/server/utils.ts';
-import { OAuthTokenPair } from "#lib/auth/token.ts";
+import { genToken } from '#lib/server/utils/generators.ts';
+import type { OAuthUserData } from '../auth/oauth-user-data';
 
 export interface UserSessionCreateProps {
     userId: string,
     pluginId: string,
-    oauth: OAuthTokenPair,
+    oauth: OAuthUserData,
 }
 
 export class UserSession {
@@ -12,13 +12,9 @@ export class UserSession {
         public readonly token: string,
         public readonly userId: string,
         public readonly pluginId: string,
-        public oauth: OAuthTokenPair,
+        public oauth: OAuthUserData,
         public readonly createdAt: Date,
     ) {}
-
-    valid(): boolean {
-        return this.oauth.access.expiresAt > (new Date());
-    }
 
     static create(data: UserSessionCreateProps) {
         return new UserSession(

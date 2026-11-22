@@ -1,9 +1,9 @@
 import type { Database } from "../db/types";
 import * as schema from '#lib/server/db/schema.ts';
-import { UserSession } from "../entities/user-session";
-import { OAuthTokenPair } from "#lib/auth/token.ts";
+import { UserSession } from "./user-session.entity";
 import { eq } from "drizzle-orm";
-import type { User } from "../entities/user";
+import type { User } from "./user.entity";
+import { OAuthUserData } from "../auth/oauth-user-data";
 
 class UserSessionMapper {
     static toEntity(data: typeof schema.userSession.$inferSelect): UserSession {
@@ -11,7 +11,12 @@ class UserSessionMapper {
             data.sessionToken,
             data.userId,
             data.pluginId,
-            OAuthTokenPair.fromFlat(data),
+            new OAuthUserData(
+                data.oAuthSub,
+                data.oAuthAccessToken,
+                data.oAuthExpiresAt ?? undefined,
+                data.oAuthRefreshToken ?? undefined,
+            ),
             data.createdAt,
         );
     }
@@ -22,8 +27,10 @@ class UserSessionMapper {
             userId: session.userId,
             pluginId: session.pluginId,
             createdAt: session.createdAt,
-
-            ...session.oauth.toFlat(),
+            oAuthSub: session.oauth.sub,
+            oAuthAccessToken: session.oauth.accessToken,
+            oAuthExpiresAt: session.oauth.expiresAt,
+            oAuthRefreshToken: session.oauth.refreshToken,
         }
     }
 }
