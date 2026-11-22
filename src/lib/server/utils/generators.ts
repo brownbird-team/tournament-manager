@@ -9,6 +9,10 @@ export function genToken() {
     return crypto.randomBytes(64).toString('base64url');
 }
 
+export function genState() {
+    return crypto.randomBytes(32).toString('base64url');
+}
+
 export function genUUID() {
     return uuidv7();
 }

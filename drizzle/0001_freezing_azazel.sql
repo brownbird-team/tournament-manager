@@ -1,0 +1,1 @@
+ALTER TABLE "oauth_request" RENAME COLUMN "challange" TO "state";

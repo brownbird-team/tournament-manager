@@ -1,5 +1,6 @@
 import * as client from 'openid-client';
 import { OAUTH_REQUEST_LIFETIME } from '$app/env/private'
+import { genState } from '../utils/generators';
 
 interface OAuthRequestCreateProps {
     useNonce: boolean;
@@ -7,7 +8,7 @@ interface OAuthRequestCreateProps {
 
 export class OAuthRequest {
     constructor(
-        public readonly challenge: string,
+        public readonly state: string,
         public readonly verifier: string,
         public readonly createdAt: Date,
         public readonly nonce?: string,
@@ -19,11 +20,15 @@ export class OAuthRequest {
         return this.createdAt > d;
     }
 
-    static async create(data: OAuthRequestCreateProps) {
+    async getChallenge() {
+        return await client.calculatePKCECodeChallenge(this.verifier);
+    }
+
+    static create(data: OAuthRequestCreateProps) {
         const verifier = client.randomPKCECodeVerifier();
 
         return new OAuthRequest(
-            await client.calculatePKCECodeChallenge(verifier),
+            genState(),
             verifier,
             new Date(),
             data.useNonce ? client.randomNonce() : undefined,

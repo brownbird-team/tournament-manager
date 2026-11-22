@@ -8,7 +8,7 @@ import { OAUTH_REQUEST_LIFETIME } from '$app/env/private';
 class OAuthRequestMapper {
     static toEntity(data: typeof schema.oauthRequest.$inferSelect): OAuthRequest {
         return new OAuthRequest(
-            data.challenge,
+            data.state,
             data.verifier,
             data.createdAt,
             data.nonce ?? undefined,
@@ -17,7 +17,7 @@ class OAuthRequestMapper {
 
     static toDatabase(req: OAuthRequest): typeof schema.oauthRequest.$inferInsert {
         return {
-            challenge: req.challenge,
+            state: req.state,
             verifier: req.verifier,
             createdAt: req.createdAt,
             nonce: req.nonce,
@@ -36,28 +36,20 @@ export class OAuthRequestRepository {
         await this.db.insert(schema.oauthRequest)
             .values(reqDb)
             .onConflictDoUpdate({
-                target: schema.oauthRequest.challenge,
+                target: schema.oauthRequest.state,
                 set: reqDb,
             });
     }
 
     async delete(req: OAuthRequest) {
         await this.db.delete(schema.oauthRequest)
-            .where(eq(schema.oauthRequest.challenge, req.challenge));
+            .where(eq(schema.oauthRequest.state, req.state));
     }
 
-    async findByChallenge(chal: string): Promise<OAuthRequest | null> {
+    async findByState(state: string): Promise<OAuthRequest | null> {
         const req = await this.db.select()
             .from(schema.oauthRequest)
-            .where(eq(schema.oauthRequest.challenge, chal));
-
-        return req.length > 0 ? OAuthRequestMapper.toEntity(req[0]) : null;
-    }
-
-    async findByNonce(nonce: string): Promise<OAuthRequest | null> {
-        const req = await this.db.select()
-            .from(schema.oauthRequest)
-            .where(eq(schema.oauthRequest.nonce, nonce));
+            .where(eq(schema.oauthRequest.state, state));
 
         return req.length > 0 ? OAuthRequestMapper.toEntity(req[0]) : null;
     }

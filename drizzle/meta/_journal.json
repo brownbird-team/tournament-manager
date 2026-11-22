@@ -8,6 +8,13 @@
       "when": 1795379934029,
       "tag": "0000_long_bruce_banner",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1795390186941,
+      "tag": "0001_freezing_azazel",
+      "breakpoints": true
     }
   ]
 }

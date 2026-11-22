@@ -1,7 +1,7 @@
 import { defineWidgetRegistry } from '#plugins';
 
-import example from '#plugins/example/example.client.ts';
+import generic from '#plugins/generic/generic.client.ts';
 
 export default defineWidgetRegistry({
-    example,
+    bbauth: generic,
 });

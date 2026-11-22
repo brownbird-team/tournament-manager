@@ -22,6 +22,13 @@ export const variables = defineEnvVars({
 		schema: z
 			.url()
 			.transform(url => url.replace(/\/+$/, ''))
-			.default('http://localhost:3000'),
+			.default('http://localhost:5173'),
+	},
+
+	BBAUTH_CLIENT_ID: {
+		schema: z.string(),
+	},
+	BBAUTH_CLIENT_SECRET: {
+		schema: z.string(),
 	},
 });

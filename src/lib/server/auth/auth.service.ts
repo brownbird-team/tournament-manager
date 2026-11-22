@@ -99,7 +99,7 @@ export class AuthService<
     async authRequest(pId: string): Promise<URL> {
         const { oauthConfig, pluginConfig, pluginId } = this.getConfig(pId);
 
-        const req = await OAuthRequest.create({
+        const req = OAuthRequest.create({
             useNonce: !oauthConfig.serverMetadata().supportsPKCE(),
         });
 
@@ -113,26 +113,22 @@ export class AuthService<
         const parameters: Record<string, string> = {
             scope,
             redirect_uri: this.genRedirectUri(pluginId),
-            code_challenge: req.challenge,
+            code_challenge: await req.getChallenge(),
             code_challenge_method: this.CODE_CHALLENGE_METHOD,
+            state: req.state,
         };
 
         return client.buildAuthorizationUrl(oauthConfig, parameters);
     }
 
     // Handle oauth user comeback
-    async authCallback(url: URL, userSession?: UserSession): Promise<UserSession> {
-        // Extract plugin ID from url
-        const pId = /^\/oauth2\/([a-zA-Z]+)\/callback/.exec(url.pathname)?.[2];
-
+    async authCallback(pId: string, url: URL, userSession?: UserSession): Promise<UserSession> {
         const { oauthConfig, pluginId } = this.getConfig(pId);
 
-        const nonce = url.searchParams.get('nonce');
-        const challenge = url.searchParams.get('challenge');
+        const state = url.searchParams.get('state');
 
-        const req = challenge ?
-            await this.oauthReqRepo.findByChallenge(challenge) :
-                (nonce ? await this.oauthReqRepo.findByNonce(nonce) : null);
+        const req = state ?
+            await this.oauthReqRepo.findByState(state) : undefined;
 
         if (!req || !req.valid())
             throw new AuthError('Given callback is invalid or expired');
@@ -141,6 +137,7 @@ export class AuthService<
             pkceCodeVerifier: req.verifier,
             expectedNonce: req.nonce,
             idTokenExpected: true,
+            expectedState: req.state,
         });
 
         const claims = tokens.claims();

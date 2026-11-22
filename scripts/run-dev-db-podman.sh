@@ -9,7 +9,7 @@ CONTAINER_ID_FILE=$(mktemp)
 podman run --rm -d \
     -e POSTGRES_USER \
     -e POSTGRES_PASSWORD \
-    -e POSTGRES_DB= \
+    -e POSTGRES_DB \
     -p "$POSTGRES_PORT:5432" \
     --cidfile "$CONTAINER_ID_FILE" \
     docker.io/library/postgres:trixie

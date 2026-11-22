@@ -6,7 +6,7 @@ import { pgTable, text, timestamp, varchar, json, uuid, primaryKey, foreignKey, 
  */
 
 export const oauthRequest = pgTable('oauth_request', {
-    challenge: text('challange')
+    state: text('state')
         .primaryKey(),
     verifier: text('verifier')
         .unique()
