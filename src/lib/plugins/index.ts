@@ -4,4 +4,4 @@ export { defineWidgetPack, defineWidgetRegistry } from './widget-registry';
 
 export type { WidgetPack, WidgetRegistry } from './widget';
 export type { Plugin, PluginWrapper, PluginRegistry } from './plugin';
-export type { PluginAuthConfig, PluginAuthRequest, PluginAuthRefresh } from './auth';
+export type { PluginAuthConfig, PluginAuthRequest, PluginAuthRefresh } from './plugin-auth';

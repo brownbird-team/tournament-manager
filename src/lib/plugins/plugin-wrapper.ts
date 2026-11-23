@@ -9,8 +9,9 @@ import type { WidgetArea } from './widget-area';
 import type {
     PluginAuthConfig,
     PluginAuthRefresh,
-    PluginAuthRequest
-} from '#lib/plugins/auth.ts';
+    PluginAuthRequest,
+    PluginAuthSystemInfo
+} from '#lib/plugins/plugin-auth.ts';
 
 export class PluginWrapperImpl<
     U, W extends WidgetPackConfig, P extends Plugin<U, W>
@@ -55,11 +56,15 @@ export class PluginWrapperImpl<
         return wIds;
     };
 
-    prepareWidget(wId: StringKeys<W>, userRaw?: PluginUserRecordRaw): WidgetPackRenderSpec<W> | null {
+    prepareWidget(
+        wId: StringKeys<W>,
+        systemInfo: PluginAuthSystemInfo,
+        userRaw?: PluginUserRecordRaw
+    ): WidgetPackRenderSpec<W> | null {
         const widget = this.plugin.widgets[wId];
 
         if (isWidgetHandlerAnon(widget)) {
-            return { wId, props: widget.prepare() };
+            return { wId, props: widget.prepare({ system: systemInfo }) };
         }
 
         if (!userRaw)
@@ -67,7 +72,10 @@ export class PluginWrapperImpl<
             
         return {
             wId,
-            props: widget.prepare(this.parseUserRecord(userRaw).data),
+            props: widget.prepare({
+                system: systemInfo,
+                user: this.parseUserRecord(userRaw).data,
+            }),
         };
     }
 
@@ -77,8 +85,8 @@ export class PluginWrapperImpl<
 
     async handleAuthRequest(auth: PluginAuthRequest): Promise<PluginUserRecordRaw> {
         return {
-            ...(await this.plugin.hooks.authRequest(auth)),
             userTypeId: this.plugin.userTypeId,
+            data: await this.plugin.hooks.authRequest(auth),
         };
     }
 
@@ -89,8 +97,8 @@ export class PluginWrapperImpl<
             return user;
 
         return {
-            ...(await this.plugin.hooks.authRefresh(auth, user)),
             userTypeId: this.plugin.userTypeId,
+            data: await this.plugin.hooks.authRefresh(auth, user),
         };
     }
 }

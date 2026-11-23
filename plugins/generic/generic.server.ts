@@ -20,15 +20,15 @@ export default (config: GenericPluginConfig) =>
             login: {
                 area: 'login',
                 title: 'Generic login widget',
-                prepare: () => ({
-                    loginUrl: '',                      // TODO: IMPORTANT!
-                    providerName: config.providerName, // Add server params to hooks
+                prepare: ({ system }) => ({
+                    loginUrl: system.loginUrl,
+                    providerName: config.providerName,
                 }),
             },
             connection: {
                 area: 'connections',
                 title: 'Generic connection widget',
-                prepare: (user) => ({
+                prepare: ({ user }) => ({
                     providerName: config.providerName,
                     userName: user.userDisplayName,
                 }),
@@ -42,9 +42,7 @@ export default (config: GenericPluginConfig) =>
                 scope: [ 'profile' ],
             }),
             authRequest: ({ userInfo }) => ({
-                data: {
-                    userDisplayName: userInfo.name ?? userInfo.sub,
-                }
+                userDisplayName: userInfo.name ?? userInfo.sub,
             }),
         }
     });

@@ -1,16 +1,17 @@
 import { isAnonymousArea, isPersonalArea } from './widget-area';
+import type { PluginAuthSystemInfo } from './plugin-auth';
 import type { WidgetAreaAnon, WidgetAreaPersonal } from './widget-area'
 
 export interface WidgetHandlerAnon<D> {
     title: string;
     area: WidgetAreaAnon;
-    prepare: () => D;
+    prepare: (args: { system: PluginAuthSystemInfo }) => D;
 }
 
 export interface WidgetHandlerPersonal<U, D> {
     title: string;
     area: WidgetAreaPersonal;
-    prepare: (user: U) => D;
+    prepare: (args: { system: PluginAuthSystemInfo, user: U }) => D;
 }
 
 export type WidgetHandler<U, D> =

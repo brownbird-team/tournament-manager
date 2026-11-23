@@ -1,5 +1,6 @@
 import type { StringKeys } from "#lib/types.ts";
 import type { PluginRegistry, PluginRegistryConfig } from "./plugin";
+import type { PluginAuthSystemInfo } from "./plugin-auth";
 import type { PluginUserDataRaw } from "./plugin-user";
 import type { WidgetIdentifier, WidgetRegistry, WidgetRegistryConfig, WidgetRenderSpec } from "./widget";
 import type { WidgetArea } from "./widget-area";
@@ -53,6 +54,7 @@ export class PluginRegistryImpl<
 
     prepareWidgets(
         widgets: WidgetIdentifier[],
+        systemInfo: PluginAuthSystemInfo,
         user?: PluginUserDataRaw
     ): WidgetRenderSpec<W>[] {
         const spec: WidgetRenderSpec<W>[] = [];
@@ -66,7 +68,7 @@ export class PluginRegistryImpl<
             if (!plugin.hasWidget(wId))
                 continue;
 
-            const wSpec = plugin.prepareWidget(wId, user?.[pId]);
+            const wSpec = plugin.prepareWidget(wId, systemInfo, user?.[pId]);
 
             if (!wSpec)
                 continue;

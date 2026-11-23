@@ -4,8 +4,9 @@ import type { MaybePromise, StringKeys } from "#lib/types.ts";
 import type {
     PluginAuthConfig, 
     PluginAuthRequest, 
-    PluginAuthRefresh 
-} from "#lib/plugins/auth.ts";
+    PluginAuthRefresh, 
+    PluginAuthSystemInfo
+} from "#lib/plugins/plugin-auth.ts";
 
 import type {
     PluginUserRecord,
@@ -44,12 +45,12 @@ export interface Plugin<U, W extends WidgetPackConfig> {
 
         authRequest: (
             auth: PluginAuthRequest
-        ) => MaybePromise<Omit<PluginUserRecord<U>, 'userTypeId'>>;
+        ) => MaybePromise<U>;
 
         authRefresh?: (
             auth: PluginAuthRefresh,
             pluginUser: PluginUserRecord<U>
-        ) => MaybePromise<Omit<PluginUserRecord<U>, 'userTypeId'>>;
+        ) => MaybePromise<U>;
     };
 }
 
@@ -67,6 +68,7 @@ export interface PluginWrapper<W extends WidgetPackConfig> {
 
     prepareWidget: (
         wId: StringKeys<W>,
+        systemInfo: PluginAuthSystemInfo,
         userRaw?: PluginUserRecordRaw
     ) => WidgetPackRenderSpec<W> | null;
 
@@ -112,6 +114,7 @@ export interface PluginRegistry<
     // widget is missing it will be skipped
     prepareWidgets: (
         widgets: WidgetIdentifier[], 
+        systemInfo: PluginAuthSystemInfo,
         user?: PluginUserDataRaw
     ) => WidgetRenderSpec<W>[];
 }

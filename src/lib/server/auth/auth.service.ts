@@ -5,7 +5,7 @@ import { genUsername } from "../utils/generators";
 
 // Plugin stuff
 import type { PluginRegistry } from "#plugins";
-import type { PluginAuthConfig } from "#lib/plugins/auth.ts";
+import type { PluginAuthConfig } from "#lib/plugins/plugin-auth.ts";
 import type { PluginRegistryConfig } from "#lib/plugins/plugin.ts";
 import type { WidgetRegistryConfig } from "#lib/plugins/widget.ts";
 
