@@ -3,8 +3,8 @@
 	import Header from '#lib/components/Header.svelte';
 	import "#lib/components/layout.css"
 	import type { LayoutProps } from './$types';
-	import logo from '#lib/assets/logoTemporary.svg'
-	let { children }: LayoutProps = $props();
+	import logo from '#lib/assets/logo.png'
+	let { children, data }: LayoutProps = $props();
 </script>
 
 <svelte:head>
@@ -13,7 +13,7 @@
 
 <div class="app_container">
 	<main>
-		<Header />
+		<Header username={data.username} />
         {@render children()}
     </main>
 </div>
@@ -38,7 +38,6 @@
 		gap: 0px;
 		
     }
-
 </style>
 
 

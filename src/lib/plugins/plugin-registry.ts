@@ -54,7 +54,7 @@ export class PluginRegistryImpl<
 
     prepareWidgets(
         widgets: WidgetIdentifier[],
-        systemInfo: PluginAuthSystemInfo,
+        systemInfo: Record<StringKeys<W>, PluginAuthSystemInfo>,
         user?: PluginUserDataRaw
     ): WidgetRenderSpec<W>[] {
         const spec: WidgetRenderSpec<W>[] = [];
@@ -68,7 +68,7 @@ export class PluginRegistryImpl<
             if (!plugin.hasWidget(wId))
                 continue;
 
-            const wSpec = plugin.prepareWidget(wId, systemInfo, user?.[pId]);
+            const wSpec = plugin.prepareWidget(wId, systemInfo[pId], user?.[pId]);
 
             if (!wSpec)
                 continue;

@@ -12,6 +12,7 @@ import { UserSessionRepository } from "./users/user-session.repository";
 
 // Services
 import { AuthService } from "./auth/auth.service";
+import { WidgetService } from "./widgets/widget.service";
 
 // Repository instances
 export const oAuthRequestRepo =
@@ -36,4 +37,10 @@ export const authService = new AuthService(
     userConnectionRepo,
     oAuthRequestRepo,
     userSessionRepo,
+);
+
+export const widgetService = new WidgetService(
+    authService,
+    pluginRegistry,
+    userConnectionRepo,
 );

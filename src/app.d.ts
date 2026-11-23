@@ -1,3 +1,4 @@
+import type { User } from "#lib/server/users/user.entity.ts";
 import type { UserSession } from "#lib/server/users/user-session.entity.ts";
 
 // See https://svelte.dev/docs/kit/types#app.d.ts
@@ -10,6 +11,7 @@ declare global {
 		// interface Platform {}
 
 		interface Locals {
+			user?: User;
 			userSession?: UserSession;
 		}
 	}

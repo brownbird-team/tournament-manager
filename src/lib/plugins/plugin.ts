@@ -114,7 +114,7 @@ export interface PluginRegistry<
     // widget is missing it will be skipped
     prepareWidgets: (
         widgets: WidgetIdentifier[], 
-        systemInfo: PluginAuthSystemInfo,
+        systemInfo: Record<StringKeys<W>, PluginAuthSystemInfo>,
         user?: PluginUserDataRaw
     ) => WidgetRenderSpec<W>[];
 }

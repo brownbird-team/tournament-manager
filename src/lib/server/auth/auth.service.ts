@@ -76,6 +76,11 @@ export class AuthService<
         return ORIGIN + `/oauth2/${pId}/callback`;
     }
 
+    // Compute login url for given plugin ID
+    public genLoginUri(pId: StringKeys<W>) {
+        return ORIGIN + `/oauth2/${pId}`;
+    }
+
     // Check if plugin ID is valid and fetch config from map
     private getConfig(pId?: string) {
         if (!pId || !this.pluginReg.hasPlugin(pId))
