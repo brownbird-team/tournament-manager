@@ -31,4 +31,11 @@ export const variables = defineEnvVars({
 	BBAUTH_CLIENT_SECRET: {
 		schema: z.string(),
 	},
+
+	GOOGLE_CLIENT_ID: {
+		schema: z.string(),
+	},
+	GOOGLE_CLIENT_SECRET: {
+		schema: z.string(),
+	},
 });

@@ -9,17 +9,17 @@
 
 <svelte:head>
 	<link rel="icon" href={logo} />
+	<title>{data.appName}</title>
 </svelte:head>
 
 <div class="app_container">
 	<main>
-		<Header username={data.username} />
+		<Header username={data.username} appName={data.appName} />
         {@render children()}
     </main>
 </div>
 
 <style>
-
 	@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 	:global(body) {

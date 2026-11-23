@@ -5,7 +5,9 @@ import generic from '#plugins/generic/generic.server.ts';
 
 import { 
     BBAUTH_CLIENT_ID,
-    BBAUTH_CLIENT_SECRET
+    BBAUTH_CLIENT_SECRET,
+    GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET
 } from '$app/env/private';
 
 export default definePluginRegistry(widgetRegistry, {
@@ -14,5 +16,11 @@ export default definePluginRegistry(widgetRegistry, {
         providerUrl: `https://auth.brownbird.eu/oauth2/openid/${BBAUTH_CLIENT_ID}`,
         clientId: BBAUTH_CLIENT_ID,
         clientSecret: BBAUTH_CLIENT_SECRET,
+    }),
+    google: generic({
+        providerName: 'Google',
+        providerUrl: `https://accounts.google.com/`,
+        clientId: GOOGLE_CLIENT_ID,
+        clientSecret: GOOGLE_CLIENT_SECRET,
     }),
 });

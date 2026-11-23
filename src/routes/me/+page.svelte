@@ -1,8 +1,16 @@
 
 <script lang='ts'>
+    import type { PageProps } from './$types.ts';
     import settings from '#lib/assets/settingsButton.svg';
-    let { data } = $props()
+    import RenderWidget from '#lib/plugins/components/RenderWidget.svelte';
+    import widgetRegistry from '#config/plugins.client.ts';
+
+    let { data }: PageProps = $props()
     let userData = $derived(data.userData);
+
+    const connectionWidgets = $derived(userData.connections.map(
+        spec => widgetRegistry.resolve(spec)
+    ));
 </script>
 
 <div class="user_container">
@@ -14,13 +22,16 @@
                 <a href="/me/settings" class="settingsImage"><img src={settings} alt="settings button icon"></a>
             </div>
             <hr>
-            
-            <div class="desc"><p>{userData.desc}</p></div>
+
+            {#if userData.desc}
+                <div class="desc"><p>{userData.desc}</p></div>
+            {/if}
+
             <div class="linked_services">
                 <p>Linked services</p>
                 <div class="linkedServicesList">
-                   {#each userData.linkedServices as service}
-                        <p>{service}</p>
+                    {#each connectionWidgets as widget}
+                        <RenderWidget {widget} />
                     {/each}
                 </div>
             </div>
@@ -151,8 +162,6 @@
     margin: 0rem 0;
     overflow-wrap: anywhere;
     font-family:Arial, Helvetica, sans-serif;
-    margin-bottom: 0.8rem;
-    
 }
 
 /* POVEZANE USLUGE */
@@ -162,7 +171,9 @@
     flex-direction: column;
     gap: 0.3rem;
     font-weight: bold;
+    margin-top: 0.5rem;
 }
+
 .linked_services > p {
     margin: 0;
 }
@@ -172,18 +183,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     gap: 0.5rem;
-}
-
-
-
-.linkedServicesList p {
-    margin: 0;
-    padding: 0.15rem 0.5rem;
-    border-radius: 6px;
-    background-color: var(--color-bg);
-    font-weight: 700;
-    font-size: 0.9rem;
-    border: var(--color-border) solid 1px;
+    padding-top: 0.5rem;
 }
 
 /* ORGANIZACIJE I TURNIRI */

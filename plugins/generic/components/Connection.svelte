@@ -21,16 +21,22 @@
     .connection {
         display: flex;
         flex-direction: row;
-        gap: 2rem;
+        gap: 1rem;
         align-items: center;
-        padding: 1rem;
-        border: 1px solid white;
+        padding: 0.5rem 1rem;
+        border: var(--color-border) solid 1px;
+        border-radius: 0.8rem;
+        background-color: var(--color-bg);
     }
 
     .connection div {
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: 0.2rem;
+    }
+
+    .connection img {
+        height: 2rem;
     }
 
     .provider {
@@ -38,7 +44,7 @@
     }
 
     .user {
-        font-size: 1.5rem;
+        font-size: 1.1rem;
         font-weight: bold;
     }
 </style>

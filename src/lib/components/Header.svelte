@@ -1,6 +1,7 @@
 <script lang="ts">
     interface Props {
         username?: string;
+        appName: string;
     }
 
     import logo from '#lib/assets/logo.png';
@@ -13,13 +14,13 @@
     let searchOrg = $state('');
     let isThemeLight = $state(false);
 
-    const { username }: Props = $props();
+    const { username, appName }: Props = $props();
 </script>
 
 <header class="top_bar">
     <a class="identity" href="/">
         <img src={logo} alt="Logo" />
-        <h1>BrownBird Tournament Manager</h1>
+        <h1>{appName}</h1>
     </a>
     <div class="search_container">
         <input type="text" placeholder="Search organizations..." bind:value={searchOrg} />

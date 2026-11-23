@@ -21,7 +21,10 @@
 
 <style>
     .login-widgets {
-        width: min(20rem, 100%);   
+        width: min(20rem, 100%);
+        display: flex;
+        flex-direction: column; 
+        gap: 1rem;
     }
 
     .container {

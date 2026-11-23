@@ -15,7 +15,11 @@ export class User {
     ) {}
 
     getImageUrl() {
-        throw new Error('Not implemented yet');
+        if (this.image)
+            throw new Error("Not implemented yet, user shouldn't have image");
+
+        const num = parseInt(this.id.slice(-1), 16) % 4;
+        return `/default-profile-images/${num}.svg`;
     }
 
     static create(data: UserCreateProps) {
