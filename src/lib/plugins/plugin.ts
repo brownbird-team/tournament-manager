@@ -61,6 +61,10 @@ export interface Plugin<U, W extends WidgetPackConfig> {
  */
 
 export interface PluginWrapper<W extends WidgetPackConfig> {
+    getTitle: () => string;
+    getWidgetTitle:
+        (wId: StringKeys<W>) => string;
+
     hasWidget: 
         (wId: string) => wId is StringKeys<W>;
     getWidgetList:
@@ -101,14 +105,23 @@ export interface PluginRegistry<
     getPluginList:
         () => StringKeys<W>[];
 
+    // Get array of all installed plugin ids
+    getPluginListWithTitles:
+        () => { pId: StringKeys<W>, pTitle: string; }[];
+
     getPlugin:
         <T extends StringKeys<W>>(pId: T) => C[T];
 
     // Get array of widget identifiers applying specified filters
     getWidgetList: (
-        area: WidgetArea, 
+        area: WidgetArea,
         plugins?: StringKeys<W> | StringKeys<W>[]
     ) => WidgetIdentifier[];
+
+    getWidgetListWithTitles: (
+        area: WidgetArea,
+        plugins?: StringKeys<W> | StringKeys<W>[]
+    ) => (WidgetIdentifier & { pTitle: string; wTitle: string; })[];
 
     // Prepare widgets for rendering on the frontend, if required data to render
     // widget is missing it will be skipped

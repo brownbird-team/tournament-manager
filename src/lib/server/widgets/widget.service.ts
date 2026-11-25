@@ -17,27 +17,13 @@ export class WidgetService<
         private userConnRepo: UserConnectionRepository,
     ) {}
 
-    private getSystemInfo() {
-        const systemInfo:
-            Partial<Record<StringKeys<W>, PluginAuthSystemInfo>> = {};
-
-        for (const pId of this.pluginRegistry.getPluginList()) {
-            systemInfo[pId] = {
-                loginUrl: this.authService.genLoginUri(pId),
-            }
-        }
-
-        return systemInfo as 
-            Record<StringKeys<W>, PluginAuthSystemInfo>;
-    }
-
     getLoginWidgets() {
         const widgetIds = 
             this.pluginRegistry.getWidgetList('login');
 
         return this.pluginRegistry.prepareWidgets(
             widgetIds,
-            this.getSystemInfo()
+            this.authService.getSystemInfo()
         );
     }
 
@@ -56,7 +42,7 @@ export class WidgetService<
 
         return this.pluginRegistry.prepareWidgets(
             widgetIds,
-            this.getSystemInfo(),
+            this.authService.getSystemInfo(),
             pluginUserData
         );
     }

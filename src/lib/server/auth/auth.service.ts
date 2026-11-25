@@ -5,7 +5,7 @@ import { genUsername } from "../utils/generators";
 
 // Plugin stuff
 import type { PluginRegistry } from "#plugins";
-import type { PluginAuthConfig } from "#lib/plugins/plugin-auth.ts";
+import type { PluginAuthConfig, PluginAuthSystemInfo } from "#lib/plugins/plugin-auth.ts";
 import type { PluginRegistryConfig } from "#lib/plugins/plugin.ts";
 import type { WidgetRegistryConfig } from "#lib/plugins/widget.ts";
 
@@ -77,7 +77,7 @@ export class AuthService<
     }
 
     // Compute login url for given plugin ID
-    public genLoginUri(pId: StringKeys<W>) {
+    private genLoginUri(pId: StringKeys<W>) {
         return ORIGIN + `/oauth2/${pId}`;
     }
 
@@ -231,5 +231,19 @@ export class AuthService<
         }
 
         return userSession;
+    }
+
+    getSystemInfo() {
+        const systemInfo:
+            Partial<Record<StringKeys<W>, PluginAuthSystemInfo>> = {};
+
+        for (const pId of this.pluginReg.getPluginList()) {
+            systemInfo[pId] = {
+                loginUrl: this.genLoginUri(pId),
+            }
+        }
+
+        return systemInfo as 
+            Record<StringKeys<W>, PluginAuthSystemInfo>;
     }
 }

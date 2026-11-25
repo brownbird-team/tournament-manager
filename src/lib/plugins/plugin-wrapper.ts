@@ -41,6 +41,14 @@ export class PluginWrapperImpl<
         return user as PluginUserRecord<U>;
     }
 
+    getTitle() {
+        return this.plugin.title;
+    }
+
+    getWidgetTitle(wId: StringKeys<W>) {
+        return this.plugin.widgets[wId].title;
+    };
+
     hasWidget(wId: string): wId is StringKeys<W> {
         return (this.widgetIdSet as Set<string>).has(wId);
     }

@@ -6,7 +6,7 @@ import type { Component, ComponentProps } from "svelte";
  * Widget reference that can be stored in the DB
  */
 
-export type WidgetIdentifier = [string, string];
+export type WidgetIdentifier = { pId: string; wId: string; };
 
 /**
  * WidgetPack

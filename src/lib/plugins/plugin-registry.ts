@@ -2,8 +2,14 @@ import type { StringKeys } from "#lib/types.ts";
 import type { PluginRegistry, PluginRegistryConfig } from "./plugin";
 import type { PluginAuthSystemInfo } from "./plugin-auth";
 import type { PluginUserDataRaw } from "./plugin-user";
-import type { WidgetIdentifier, WidgetRegistry, WidgetRegistryConfig, WidgetRenderSpec } from "./widget";
 import type { WidgetArea } from "./widget-area";
+
+import type {
+    WidgetIdentifier,
+    WidgetRegistry,
+    WidgetRegistryConfig,
+    WidgetRenderSpec
+} from "./widget";
 
 export class PluginRegistryImpl<
     W extends WidgetRegistryConfig, C extends PluginRegistryConfig<W>
@@ -31,6 +37,13 @@ export class PluginRegistryImpl<
         return Array.from(this.widgetPackIdSet);
     }
 
+    getPluginListWithTitles() {
+        return this.getPluginList().map(pId => ({ 
+            pId,
+            pTitle: this.plugins[pId].getTitle() 
+        }));
+    }
+
     getWidgetList(
         area: WidgetArea,
         plugins?: StringKeys<W> | StringKeys<W>[]
@@ -45,11 +58,38 @@ export class PluginRegistryImpl<
             const widgets = this.getPlugin(pId).getWidgetList(area);
 
             widgetIdentifiers.push(
-                ...widgets.map((wId): WidgetIdentifier => [pId, wId])
+                ...widgets.map((wId): WidgetIdentifier => ({ pId, wId }))
             );
         }
 
         return widgetIdentifiers;
+    };
+
+    getWidgetListWithTitles(
+        area: WidgetArea,
+        plugins?: StringKeys<W> | StringKeys<W>[]
+    ) {
+        const result: 
+            (WidgetIdentifier & { pTitle: string; wTitle: string; })[] = [];
+
+        const pIds = typeof(plugins) === 'undefined' ?
+            this.getPluginList() :
+                Array.isArray(plugins) ? plugins : [plugins];
+
+        for (const pId of pIds) {
+            const plugin = this.getPlugin(pId);
+            const widgets = plugin.getWidgetList(area);
+
+            result.push(
+                ...widgets.map((wId) => ({
+                    pId, wId,
+                    pTitle: plugin.getTitle(),
+                    wTitle: plugin.getWidgetTitle(wId),
+                }))
+            );
+        }
+
+        return result;
     };
 
     prepareWidgets(
@@ -59,7 +99,7 @@ export class PluginRegistryImpl<
     ): WidgetRenderSpec<W>[] {
         const spec: WidgetRenderSpec<W>[] = [];
 
-        for (const [pId, wId] of widgets) {
+        for (const { pId, wId } of widgets) {
             if (!this.hasPlugin(pId))
                 continue;
 
