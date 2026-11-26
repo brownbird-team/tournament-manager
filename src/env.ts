@@ -38,4 +38,7 @@ export const variables = defineEnvVars({
 	GOOGLE_CLIENT_SECRET: {
 		schema: z.string(),
 	},
+	IMAGE_STORAGE_PATH: {
+		schema: z.string()
+	}
 });
