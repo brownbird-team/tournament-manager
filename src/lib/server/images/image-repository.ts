@@ -18,7 +18,7 @@ export class ImageRepository {
         this.validateFile(image)
 
 
-        
+
         const inputBuffer = await this.toBuffer(image)
 
         const hash = this.computeHash(inputBuffer)
