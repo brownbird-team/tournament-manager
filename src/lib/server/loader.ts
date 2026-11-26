@@ -56,4 +56,5 @@ export const userService = new UserService(
     userConnectionRepo,
     pluginRegistry,
     authService,
+    imageRepo,
 );

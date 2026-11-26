@@ -16,7 +16,7 @@ export class User {
 
     getImageUrl() {
         if (this.image)
-            throw new Error("Not implemented yet, user shouldn't have image");
+            return `/images/${this.image}`;
 
         const num = parseInt(this.id.slice(-1), 16) % 4;
         return `/default-profile-images/${num}.svg`;

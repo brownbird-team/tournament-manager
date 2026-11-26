@@ -8,6 +8,7 @@ import type { WidgetRegistryConfig } from "#lib/plugins/widget.ts";
 import type { PluginRegistryConfig } from "#lib/plugins/plugin.ts";
 import type { UserSession } from "./user-session.entity";
 import type { AuthService } from "../auth/auth.service";
+import type { ImageRepository } from "../images/image-repository";
 
 export class UserService<
     W extends WidgetRegistryConfig,
@@ -18,6 +19,7 @@ export class UserService<
         private userConnRepo: UserConnectionRepository,
         private pluginRegistry: PluginRegistry<W, P>,
         private authService: AuthService<W, P>,
+        private imageRepo: ImageRepository,
     ) {}
 
     async saveUserSettings(user: User, raw: unknown) {
@@ -45,7 +47,11 @@ export class UserService<
         newUser.bio = result.data.bio;
         newUser.username = result.data.username;
         
-        // TODO: save profile image
+        if (result.data.image && result.data.image.size > 0) {
+            // TODO: handle errors
+            const hash = await this.imageRepo.save(result.data.image);
+            newUser.image = hash;
+        }
 
         await FormError.throwOnUserError([ 'username' ],
             this.userRepo.save(newUser)
