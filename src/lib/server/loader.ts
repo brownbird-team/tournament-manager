@@ -9,6 +9,8 @@ import { OrganizationRepository } from "./organizations/organization.repository"
 import { UserRepository } from "./users/user.repository";
 import { UserConnectionRepository } from "./users/user-connection.repository";
 import { UserSessionRepository } from "./users/user-session.repository";
+import { ImageRepository } from "./images/image-repository";
+
 
 // Services
 import { AuthService } from "./auth/auth.service";
@@ -30,6 +32,9 @@ export const userConnectionRepo =
 export const userSessionRepo =
     new UserSessionRepository(db);
 
+export const imageRepo = 
+    new ImageRepository()
+
 // Service instances
 export const authService = new AuthService(
     pluginRegistry,
@@ -44,3 +49,4 @@ export const widgetService = new WidgetService(
     pluginRegistry,
     userConnectionRepo,
 );
+
