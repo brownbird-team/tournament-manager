@@ -25,6 +25,10 @@ export class Organization {
         return `/org/${this.slug}`;
     }
 
+    getSettingsUrl() {
+        return `/org/${this.slug}/settings`;
+    }
+
     getImageUrl() {
         if (this.image)
             return `/images/${this.image}`;

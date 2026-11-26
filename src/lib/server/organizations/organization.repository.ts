@@ -78,6 +78,17 @@ export class OrganizationRepository {
         return res.length > 0 ? OrganizationMapper.toEntity(res[0]) : null;
     }
 
+    async userIsOwner(org: Organization, user: User): Promise<boolean> {
+        const res = await this.db.select()
+            .from(schema.orgOwner)
+            .where(and(
+                eq(schema.orgOwner.orgId, org.id),
+                eq(schema.orgOwner.userId, user.id),
+            ));
+
+        return res.length > 0;
+    }
+
     async findBySlug(slug: string): Promise<Organization | null> {
         const res = await this.db.select()
             .from(schema.org)

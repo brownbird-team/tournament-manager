@@ -95,5 +95,7 @@ export class OrganizationService {
         await FormError.throwOnUserError([ 'slug' ],
             this.orgRepo.save(newOrg)
         );
+
+        return newOrg;
     }
 }

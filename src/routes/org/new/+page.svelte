@@ -41,7 +41,6 @@
 
 <div class="org-container">
     <h2>Create organization</h2>
-    {JSON.stringify(form?.errors)}
     <form class="data-container" method="POST" enctype="multipart/form-data" use:enhance>
         <span class="left">
             <div class="profile-section">
@@ -60,6 +59,9 @@
                 </label>
 
                 <p>Change profile picture</p>
+                {#if form?.errors?.image}
+                    <small>{form?.errors?.image}</small>
+                {/if}
             </div>
         </span>
         <span class="right">
@@ -75,6 +77,9 @@
                     required
                 />
                 <small>{name.length}/{MAX_NAME_LENGTH}</small>
+                {#if form?.errors?.name}
+                    <small>{form?.errors?.name}</small>
+                {/if}
             </div>
 
             <div class="settings-divider"></div>
@@ -91,6 +96,9 @@
                     required
                 />
                 <small>{slug.length}/{MAX_NAME_LENGTH}</small>
+                {#if form?.errors?.slug}
+                    <small>{form?.errors?.slug}</small>
+                {/if}
             </div>
 
             <div class="settings-divider"></div>
@@ -106,15 +114,10 @@
                     rows="4"
                 ></textarea>
                 <small>{desc.length}/{MAX_DESC_LENGTH}</small>
+                {#if form?.errors?.description}
+                    <small>{form?.errors?.description}</small>
+                {/if}
             </div>
-
-            {#if errorMessage || form?.error}
-                <p class="error-message">{errorMessage || form.error}</p>
-            {/if}
-
-            {#if form?.success}
-                <p class="success-message">{form.message}</p>
-            {/if}
 
             <button class="create-button" type="submit">
                 Create

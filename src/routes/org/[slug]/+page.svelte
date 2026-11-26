@@ -3,6 +3,8 @@
     import gen from '#lib/assets/genshin.png';
     import val from '#lib/assets/val_icon.jpg';
     import { page } from '$app/state';
+    import settingsIcon from '#lib/assets/settingsButton.svg';
+
     let { data }: PageProps = $props()
     let orgData = $derived(data.organisationData);
 </script>
@@ -33,7 +35,12 @@
             </div>
             <div class = "name">
                 <p>
-                    {orgData.name}
+                    <span>{orgData.name}</span>
+                    {#if data.userIsOwner}
+                        <a class="settings" href={data.organisationData.settingsUrl}>
+                            <img src={settingsIcon} />
+                        </a>
+                    {/if}
                 </p>
             </div>
         </div>
@@ -115,6 +122,22 @@
 
 
 <style>
+
+.settings img {
+    height: 2rem;
+}
+
+.settings {
+    height: 2rem;
+    display: flex;
+    align-items: center;
+}
+
+.name p {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
 
 /* DESCRIPTION */
 .desc {
