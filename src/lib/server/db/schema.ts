@@ -90,8 +90,10 @@ export const userSession = pgTable('user_session', {
 export const org = pgTable('organization', {
     orgId: uuid('organization_id')
         .primaryKey(),
+    name: varchar('name')
+        .notNull(),
     slug: varchar('slug')
-        .unique()
+        .unique('org_slug_unique')
         .notNull(),
     description: text('description'),
     apiToken: text('api_token')

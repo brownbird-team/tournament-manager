@@ -3,12 +3,14 @@ import * as schema from '#lib/server/db/schema.ts';
 import type { Database } from "#lib/server/db/types.ts";
 import { and, eq } from 'drizzle-orm';
 import type { User } from '../users/user.entity';
-
+import { catchConstraint } from '../utils/catch-constraint';
+import { UniqueError } from '../utils/errors';
 
 class OrganizationMapper {
     static toEntity(data: typeof schema.org.$inferSelect): Organization {
         return new Organization(
             data.orgId,
+            data.name,
             data.slug,
             data.apiToken,
             data.description ?? undefined,
@@ -18,6 +20,7 @@ class OrganizationMapper {
     static toDatabase(org: Organization): typeof schema.org.$inferInsert {
         return {
             orgId: org.id,
+            name: org.name,
             slug: org.slug,
             apiToken: org.apiToken,
             description: org.description,
@@ -33,12 +36,17 @@ export class OrganizationRepository {
     async save(org: Organization) {
         const orgDb = OrganizationMapper.toDatabase(org);
 
-        await this.db.insert(schema.org)
-            .values(orgDb)
-            .onConflictDoUpdate({ 
-                target: schema.org.orgId, 
-                set: orgDb 
-            });
+        const status = await catchConstraint([ 'org_slug_unique' ], 
+            this.db.insert(schema.org)
+                .values(orgDb)
+                .onConflictDoUpdate({ 
+                    target: schema.org.orgId, 
+                    set: orgDb 
+                })
+        );
+
+        if (!status.ok)
+            throw new UniqueError('This slug is already taken');
     }
 
     async delete(org: Organization) {

@@ -41,7 +41,7 @@
         <div class="list_organizations">
             <div class="orgFlex1">
                 <p>My organizations</p>
-                <a href="/settings">+</a>
+                <a href="/org/new">+</a>
                 <hr>
             </div>
             {#each userData.organizations as org}
@@ -268,7 +268,7 @@
     font-weight: 800;
     margin: 0 0 0.2rem;
     overflow-wrap: anywhere;
-    text-align: center;
+    /*text-align: center;*/
 }
 
 .list_organizations:hover,

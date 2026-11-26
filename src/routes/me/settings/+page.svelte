@@ -2,6 +2,7 @@
     import { untrack } from 'svelte';
     import type { PageProps } from './$types';
     import profileOverlay from '#lib/assets/photo.svg';
+  import { enhance } from '$app/forms';
 
     let { data, form }: PageProps = $props();
 
@@ -39,6 +40,7 @@
     method="POST"
     enctype="multipart/form-data"
     class="settings-container"
+    use:enhance
 >
     <h2>User Settings</h2>
 
@@ -110,7 +112,7 @@
     {#if data.plugins.connected.length > 0}
         <h3>Linked</h3>
         {#each data.plugins.connected as plugin}
-            <form action="?/disconnect" method="POST" class="linked-row">
+            <form action="?/disconnect" method="POST" class="linked-row" use:enhance>
                 <p>{plugin.pTitle}</p>
                 <input type="hidden" name="plugin" value={plugin.pId}>
 
