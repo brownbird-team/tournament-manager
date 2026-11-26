@@ -2,7 +2,7 @@
     import { untrack } from 'svelte';
     import type { PageProps } from './$types';
     import profileOverlay from '#lib/assets/photo.svg';
-  import { enhance } from '$app/forms';
+    import { enhance } from '$app/forms';
 
     let { data, form }: PageProps = $props();
 

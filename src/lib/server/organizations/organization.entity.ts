@@ -3,6 +3,7 @@ import { genToken, genUUID } from '#lib/server/utils/generators.ts';
 export interface OrganizationCreateProps {
     slug: string;
     name: string;
+    image?: string;
     description?: string;
 }
 
@@ -12,6 +13,7 @@ export class Organization {
         public name: string,
         public slug: string,
         public apiToken: string,
+        public image?: string,
         public description?: string,
     ) {}
 
@@ -23,12 +25,21 @@ export class Organization {
         return `/org/${this.slug}`;
     }
 
+    getImageUrl() {
+        if (this.image)
+            return `/images/${this.image}`;
+
+        const num = parseInt(this.id.slice(-1), 16) % 4;
+        return `/default-profile-images/${num}.svg`;
+    }
+
     static create(data: OrganizationCreateProps) {
         return new Organization(
             genUUID(),
             data.name,
             data.slug,
             genToken(),
+            data.image,
             data.description,
         );
     }
@@ -39,6 +50,7 @@ export class Organization {
             org.name,
             org.slug,
             org.apiToken,
+            org.image,
             org.description,
         );
     }

@@ -1,35 +1,46 @@
-import { fail } from '@sveltejs/kit';
-import type { Actions } from './$types';
+import { fail, redirect } from '@sveltejs/kit';
+import type { Actions, PageServerLoad } from './$types';
+import { requireAuth } from '#lib/server/utils/require-auth.ts';
+import { strOnly } from '#lib/server/utils/str-only.ts';
+import { orgService } from '#lib/server/loader.ts';
+import { FormError } from '#lib/server/utils/errors.ts';
 
 const MAX_NAME_LENGTH = 20;
 const MIN_NAME_LENGTH = 3;
 const MAX_DESC_LENGTH = 160;
 
+export const load: PageServerLoad = async ({ locals }) => {
+    requireAuth(locals);
+};
+
 export const actions: Actions = {
-    default: async ({ request }) => {
+    default: async ({ locals, request }) => {
+        requireAuth(locals);
+
         const data = await request.formData();
 
-        const name = String(data.get('name') ?? '').trim();
-        const desc = String(data.get('description') ?? '').trim();
-        const profile = data.get('profilePic');
+        const slug = strOnly(data.get('slug'));
+        const name = strOnly(data.get('name'));
+        const description = strOnly(data.get('description'));
+        const image = data.get('image')?? undefined;
 
-        if (name.length < MIN_NAME_LENGTH || name.length > MAX_NAME_LENGTH)
-            return fail(400, { error: 'Name must be between ' + MIN_NAME_LENGTH + ' and ' + MAX_NAME_LENGTH + ' characters.'});
+        try {
+            const org = await orgService.createOrganization(locals.user, {
+                name, slug, description, image
+            });
 
-        if (desc.length > MAX_DESC_LENGTH)
-            return fail(400, { error: 'Description cannot exceed ' + MAX_DESC_LENGTH + ' characters.' });
+            redirect(301, org.getUrl());
 
-        if (profile instanceof File && profile.size > 0) {
-            const allowedTypes = [
-                'image/jpeg',
-                'image/png',
-                'image/webp'
-            ];
+        } catch (err) {
+            if (!(err instanceof FormError))
+                throw err;
 
-            if (!allowedTypes.includes(profile.type)) { return fail(400, { error: 'Invalid profile picture format.' });
-            }
+            return fail(400, {
+                errors: err.issues,
+                data: {
+                    name, slug, description
+                },
+            });
         }
-
-        return { success: true, message: 'Organization created successfully!'};
     }
 };

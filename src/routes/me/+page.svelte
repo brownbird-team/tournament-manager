@@ -45,7 +45,9 @@
                 <hr>
             </div>
             {#each userData.organizations as org}
-                <p>{org}</p>
+                <p class="org-item">
+                    <a href={org.url}>{org.name}</a>
+                </p>
             {/each}
         </div>
         <div class="tournaments">
@@ -61,6 +63,10 @@
 /* GENERALNO */
 * {
     box-sizing: border-box;
+}
+
+.org-item a {
+    color: var(--color-text);
 }
 
 .user_container {

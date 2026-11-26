@@ -13,6 +13,7 @@ class OrganizationMapper {
             data.name,
             data.slug,
             data.apiToken,
+            data.image ?? undefined,
             data.description ?? undefined,
         );
     }
@@ -23,6 +24,7 @@ class OrganizationMapper {
             name: org.name,
             slug: org.slug,
             apiToken: org.apiToken,
+            image: org.image,
             description: org.description,
         };
     }

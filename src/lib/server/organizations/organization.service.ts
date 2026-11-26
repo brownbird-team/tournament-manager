@@ -3,10 +3,12 @@ import type { OrganizationRepository } from "./organization.repository";
 import type { User } from "../users/user.entity";
 import { FormError, UserError } from "../utils/errors";
 import { Organization } from "./organization.entity";
+import type { ImageRepository } from "../images/image-repository";
 
 export class OrganizationService {
     constructor(
-        private orgRepo: OrganizationRepository
+        private orgRepo: OrganizationRepository,
+        private imageRepo: ImageRepository,
     ) {}
 
     async createOrganization(owner: User, data: unknown): Promise<Organization> {
@@ -24,6 +26,9 @@ export class OrganizationService {
                 .string()
                 .max(800)
                 .optional(),
+            image: z
+                .file()
+                .optional(),
         });
 
         const result = schema.safeParse(data);
@@ -31,21 +36,28 @@ export class OrganizationService {
         if (!result.success)
             throw FormError.fromZodError(result.error);
 
-        const org = Organization.create(result.data);
+        const org = Organization.create({
+            name: result.data.name,
+            slug: result.data.slug,
+            description: result.data.description,
+        });
+
+        if (result.data.image && result.data.image.size > 0) {
+            // TODO: handle errors
+            const hash = await this.imageRepo.save(result.data.image);
+            org.image = hash;
+        }
 
         await FormError.throwOnUserError([ 'slug' ],
             this.orgRepo.save(org)
         );
 
         await this.orgRepo.addOwner(org, owner);
-
         return org;
     }
 
-    async saveOrgSettings(data: unknown) {
+    async saveOrgSettings(org: Organization, data: unknown) {
         const schema = z.object({
-            id: z
-                .string(),
             name: z
                 .string()
                 .min(4)
@@ -59,6 +71,9 @@ export class OrganizationService {
                 .string()
                 .max(800)
                 .optional(),
+            image: z
+                .file()
+                .optional(),
         });
 
         const result = schema.safeParse(data);
@@ -66,17 +81,19 @@ export class OrganizationService {
         if (!result.success)
             throw FormError.fromZodError(result.error);
 
-        const org = await this.orgRepo.findById(result.data.id);
+        const newOrg = Organization.clone(org);
 
-        if (!org) // TODO: this should be handled somehow...
-            throw new UserError('Not found', 404);
+        newOrg.name = result.data.name;
+        newOrg.slug = result.data.slug;
+        newOrg.description = result.data.description;
 
-        org.name = result.data.name;
-        org.slug = result.data.slug;
-        org.description = result.data.description;
+        if (result.data.image && result.data.image.size > 0) {
+            // TODO: handle errors
+            newOrg.image = await this.imageRepo.save(result.data.image);
+        }
 
         await FormError.throwOnUserError([ 'slug' ],
-            this.orgRepo.save(org)
+            this.orgRepo.save(newOrg)
         );
     }
 }

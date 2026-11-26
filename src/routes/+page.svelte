@@ -1,4 +1,11 @@
+<script lang="ts">
+    import logo from '#lib/assets/logo.png'
+    import type { PageProps } from './$types';
 
+    const { data }: PageProps = $props();
+</script>
+
+<!--
 <div class="homepage_container">
 
     <div class="banner">
@@ -16,10 +23,16 @@
     </div>
 
 </div>
+-->
 
+<div class="front-page-container">
+    <img src={logo} alt="Logo">
+    <h2>{data.appName}</h2>
+    <a class="login-button" href="/login">Login</a>
+</div>
 
 <style>
-
+    /*
     .homepage_container{
         display: flex;
         flex-direction: column;
@@ -112,5 +125,31 @@
             padding: 12px 40px;
         }
     }
+    */
 
+    .front-page-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem 1rem;
+    }
+
+    .front-page-container img {
+        height: 15rem;
+    }
+
+    .front-page-container h2 {
+        font-size: 2rem;
+    }
+
+    .login-button {
+        width: min(100%, 10rem);
+        background-color: var(--color-framebg);
+        padding: 1rem;
+        text-align: center;
+        text-decoration: none;
+        color: var(--color-text);
+        border-radius: 0.5rem;
+        border: 1px solid var(--color-border);
+    }
 </style>

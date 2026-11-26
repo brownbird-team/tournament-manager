@@ -1,73 +1,61 @@
 
 <script lang="ts">
+    import type { PageProps } from './$types';
     import { enhance } from "$app/forms";
+    import { untrack } from 'svelte';
     import photoProfile from '#lib/assets/photo.svg';
+    import placeholderImage from '#lib/assets/logoTemporary.svg';
 
-    let { form } = $props();
+    let { form }: PageProps = $props();
 
     //current name and desc
     let name = $state('');
     let desc = $state('');
-
-    //current profile pic
-    let profilePic = $state(photoProfile);
-
-    // new profile pic
-    let selectedImage = $state<File | null>(null);
+    let slug = $state('');
 
     let errorMessage = $state('');
 
-    const MAX_NAME_LENGTH = 20;
-    const MIN_NAME_LENGTH = 3;
+    const MAX_NAME_LENGTH = 30;
+    const MIN_NAME_LENGTH = 4;
     const MAX_DESC_LENGTH = 160;
 
-    let previousImageUrl: string | null = null;
+    let files = $state<FileList | undefined>()
 
-    async function changeProfileImage(event: Event) {
-        const input = event.currentTarget as HTMLInputElement;
-        const file = input.files?.[0];
+    let profileImage = $state(undefined);
 
-        if (!file) return;
+    $effect(() => {
+        if (files && files.length > 0) {
+            const url = URL.createObjectURL(files[0]);
+            profileImage = url;
 
-        errorMessage = '';
-
-        // Provjera formata
-        const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
-
-        if (!allowedTypes.includes(file.type)) {
-            errorMessage = 'Please use a PNG, JPEG or WEBP picture format';
-            input.value = '';
-            return;
+            return () => {
+                URL.revokeObjectURL(url);
+            }
         }
 
-        // new pic showcase
-        if (previousImageUrl) {
-            URL.revokeObjectURL(previousImageUrl);
-        }
+        profileImage = undefined;
+    });
 
-        previousImageUrl = URL.createObjectURL(file);
-
-        profilePic = previousImageUrl;
-        selectedImage = file;        
-    }
+    let showedImage = $derived(profileImage ?? placeholderImage);
 </script>
 
-<div class="org_container">
+<div class="org-container">
     <h2>Create organization</h2>
-    <form class="data_container" method="POST" enctype="multipart/form-data" use:enhance>
+    {JSON.stringify(form?.errors)}
+    <form class="data-container" method="POST" enctype="multipart/form-data" use:enhance>
         <span class="left">
-            <div class="profile_section">
-                <label class="avatar_upload">
-                    <img src={profilePic} alt="User profile" />
-                    <div class="avatar_overlay">
+            <div class="profile-section">
+                <label class="avatar-upload">
+                    <img src={showedImage} alt="User profile" />
+                    <div class="avatar-overlay">
                         <img src={photoProfile} alt="Change profile pic" />
                     </div>
 
                     <input
                         name="profilePic"
                         type="file"
+                        bind:files={files}
                         accept="image/png,image/jpeg,image/webp"
-                        onchange={changeProfileImage}
                     />
                 </label>
 
@@ -75,10 +63,9 @@
             </div>
         </span>
         <span class="right">
-            <div class="setting_field">
+            <div class="setting-field">
                 <label for="name">Organization name</label>
                 <input
-                    id="name"
                     name="name"
                     type="text"
                     bind:value={name}
@@ -90,9 +77,25 @@
                 <small>{name.length}/{MAX_NAME_LENGTH}</small>
             </div>
 
-            <div class="settings_divider"></div>
+            <div class="settings-divider"></div>
 
-            <div class="setting_field">
+            <div class="setting-field">
+                <label for="slug">URL slug</label>
+                <input
+                    name="slug"
+                    type="text"
+                    bind:value={slug}
+                    placeholder="Enter slug"
+                    minlength={MIN_NAME_LENGTH}
+                    maxlength={MAX_NAME_LENGTH}
+                    required
+                />
+                <small>{slug.length}/{MAX_NAME_LENGTH}</small>
+            </div>
+
+            <div class="settings-divider"></div>
+
+            <div class="setting-field">
                 <label for="description">Change description</label>
                 <textarea
                     id="description"
@@ -106,14 +109,14 @@
             </div>
 
             {#if errorMessage || form?.error}
-                <p class="error_message">{errorMessage || form.error}</p>
+                <p class="error-message">{errorMessage || form.error}</p>
             {/if}
 
             {#if form?.success}
-                <p class="success_message">{form.message}</p>
+                <p class="success-message">{form.message}</p>
             {/if}
 
-            <button class="create_button" type="submit">
+            <button class="create-button" type="submit">
                 Create
             </button>
         </span> 
@@ -121,7 +124,7 @@
 </div>
 
 <style>
-    .data_container {
+    .data-container {
         display: flex;
         flex-direction: row;
     }
@@ -131,7 +134,7 @@
     .right {
         width: 65%;
     }
-    .org_container {
+    .org-container {
         width: 700px;
         max-width: 90%;
         margin: 40px auto;
@@ -148,7 +151,7 @@
         font-size: 24px;
     }
 
-    .profile_section {
+    .profile-section {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -156,7 +159,7 @@
         margin-bottom: 25px;
     }
 
-    .avatar_upload {
+    .avatar-upload {
         position: relative;
         width: 130px;
         height: 130px;
@@ -166,14 +169,14 @@
         border: rgb(184, 159, 159) 2px solid;
     }
 
-    .avatar_upload img {
+    .avatar-upload img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         border-radius: 50%;
     }
 
-    .avatar_overlay {
+    .avatar-overlay {
         position: absolute;
         inset: 0;
         background: rgba(0, 0, 0, 0.55);
@@ -184,43 +187,43 @@
         transition: opacity 0.2s ease;
     }
 
-    .avatar_overlay img {
+    .avatar-overlay img {
         width: 35px;
         height: 35px;
     }
 
-    .avatar_upload:hover .avatar_overlay {
+    .avatar-upload:hover .avatar-overlay {
         opacity: 1;
     }
 
-    .avatar_upload input {
+    .avatar-upload input {
         display: none;
     }
 
-    .profile_section p {
+    .profile-section p {
         font-size: 13px;
     }
 
-    .settings_divider {
+    .settings-divider {
         height: 1px;
         width: 100%;
         background-color: var(--color-border);
         margin: 25px 0;
     }
 
-    .setting_field {
+    .setting-field {
         display: flex;
         flex-direction: column;
         gap: 10px;
     }
 
-    .setting_field label {
+    .setting-field label {
         font-weight: 600;
         font-size: 15px;
     }
 
-    .setting_field input,
-    .setting_field textarea {
+    .setting-field input,
+    .setting-field textarea {
         background-color: var(--color-bg);
         color: var(--color-text);
         border: 1px solid var(--color-border);
@@ -233,17 +236,17 @@
         transition: border-color 0.2s ease;
     }
 
-    .setting_field input:focus,
-    .setting_field textarea:focus {
+    .setting-field input:focus,
+    .setting-field textarea:focus {
         border-color: var(--color-framehover);
     }
 
-    .setting_field input::placeholder,
-    .setting_field textarea::placeholder {
+    .setting-field input::placeholder,
+    .setting-field textarea::placeholder {
         color: var(--color-text);
     }
 
-    .create_button {
+    .create-button {
         display: block;
         margin: 30px 0 0 auto;
         padding: 11px 22px;
@@ -255,7 +258,7 @@
         transition: background-color 0.2s ease;
     }
 
-    .create_button:hover {
+    .create-button:hover {
         background-color: var(--color-framehover);
     }
 </style>

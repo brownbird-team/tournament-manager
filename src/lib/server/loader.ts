@@ -16,6 +16,7 @@ import { ImageRepository } from "./images/image-repository";
 import { AuthService } from "./auth/auth.service";
 import { WidgetService } from "./widgets/widget.service";
 import { UserService } from "./users/user.service";
+import { OrganizationService } from "./organizations/organization.service";
 
 // Repository instances
 export const oAuthRequestRepo =
@@ -56,5 +57,10 @@ export const userService = new UserService(
     userConnectionRepo,
     pluginRegistry,
     authService,
+    imageRepo,
+);
+
+export const orgService = new OrganizationService(
+    organisationRepo,
     imageRepo,
 );

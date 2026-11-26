@@ -95,6 +95,7 @@ export const org = pgTable('organization', {
     slug: varchar('slug')
         .unique('org_slug_unique')
         .notNull(),
+    image: varchar(),
     description: text('description'),
     apiToken: text('api_token')
         .unique()
