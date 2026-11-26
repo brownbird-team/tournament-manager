@@ -38,11 +38,13 @@
             </div>
         </div>
 
-        <div class = "desc">
-            <p>
-                {orgData.desc}
-            </p>
-        </div>
+        {#if orgData.desc}
+            <div class = "desc">
+                <p>
+                    {orgData.desc}
+                </p>
+            </div>
+        {/if}
 
         <div class = "tournaments">
             <div class = "upcoming_tour">

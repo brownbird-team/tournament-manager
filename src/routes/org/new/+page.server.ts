@@ -22,7 +22,7 @@ export const actions: Actions = {
         const slug = strOnly(data.get('slug'));
         const name = strOnly(data.get('name'));
         const description = strOnly(data.get('description'));
-        const image = data.get('image')?? undefined;
+        const image = data.get('image') ?? undefined;
 
         try {
             const org = await orgService.createOrganization(locals.user, {

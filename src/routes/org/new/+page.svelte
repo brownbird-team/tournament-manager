@@ -52,7 +52,7 @@
                     </div>
 
                     <input
-                        name="profilePic"
+                        name="image"
                         type="file"
                         bind:files={files}
                         accept="image/png,image/jpeg,image/webp"
