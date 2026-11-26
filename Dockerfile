@@ -22,4 +22,4 @@ ENV GOOGLE_CLIENT_SECRET="a"
 
 ENV IMAGE_STORAGE_PATH="./.image-storage" 
 
-ENTRYPOINT [ "/bin/node", "build/index.js" ]
+ENTRYPOINT [ "/usr/local/bin/node", "build/index.js" ]
