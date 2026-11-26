@@ -1,8 +1,6 @@
-import type { PluginAuthSystemInfo } from "#lib/plugins/plugin-auth.ts";
 import type { PluginUserDataRaw } from "#lib/plugins/plugin-user.ts";
 import type { PluginRegistry, PluginRegistryConfig } from "#lib/plugins/plugin.ts";
 import type { WidgetRegistryConfig } from "#lib/plugins/widget.ts";
-import type { StringKeys } from "#lib/types.ts";
 import type { AuthService } from "../auth/auth.service";
 import type { UserConnectionRepository } from "../users/user-connection.repository";
 import type { User } from "../users/user.entity";

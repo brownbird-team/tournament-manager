@@ -30,4 +30,13 @@ export class User {
             data.image,
         );
     }
+
+    static clone(user: User) {
+        return new User(
+            user.id,
+            user.username,
+            user.bio,
+            user.image
+        );
+    }
 }

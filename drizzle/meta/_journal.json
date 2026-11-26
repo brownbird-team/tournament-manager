@@ -15,6 +15,13 @@
       "when": 1795390186941,
       "tag": "0001_freezing_azazel",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1795651228957,
+      "tag": "0002_superb_zzzax",
+      "breakpoints": true
     }
   ]
 }

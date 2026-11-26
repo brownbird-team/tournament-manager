@@ -1,140 +1,186 @@
-
 <script lang="ts">
-    import { goto } from '$app/navigation';
-    import type { UserData } from '../../../lib/types';
-    import photoProfile from '#lib/assets/photo.svg';
-    let { data }: { data: { userData: UserData } } = $props();
-    let userData = $derived(data.userData)
+    import { untrack } from 'svelte';
+    import type { PageProps } from './$types';
+    import profileOverlay from '#lib/assets/photo.svg';
 
-    //current username and desc
-    let username = $derived(userData.username);
-    let bio = $derived(userData.desc ?? '');
+    let { data, form }: PageProps = $props();
 
-    //current profile pic
-    let profilePic = $derived(userData.profilePic);
+    let settingsForm =
+        $derived(form && form.form === 'settings' ? form : undefined);
 
-    // new profile pic
-    let selectedImage = $derived<File | null>(null);
+    let bio = $derived(settingsForm?.data.bio ?? data.user.desc ?? '');
+    let username = $derived(settingsForm?.data.username ?? data.user.username);
 
-    let errorMessage = $derived('');
+    const MAX_BIO_LENGTH = 800;
+    const MIN_USERNAME_LENGTH = 4;
+    const MAX_USERNAME_LENGTH = 30;
 
-    const MAX_USERNAME_LENGTH = 20;
-    const MIN_USERNAME_LENGTH = 3;
-    const MAX_BIO_LENGTH = 160;
+    let files = $state<FileList | undefined>()
 
-    let previousImageUrl: string | null = null;
+    let profileImage =
+        $state(untrack(() => data.user.profilePic));
 
-    async function changeProfileImage(event: Event) {
-        const input = event.currentTarget as HTMLInputElement;
-        const file = input.files?.[0];
+    $effect(() => {
+        if (files && files.length > 0) {
+            const url = URL.createObjectURL(files[0]);
+            profileImage = url;
 
-        if (!file) return;
-
-        errorMessage = '';
-
-        // Provjera formata
-        const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
-
-        if (!allowedTypes.includes(file.type)) {
-            errorMessage = 'Please use a PNG, JPEG or WEBP picture format';
-            input.value = '';
-            return;
+            return () => {
+                URL.revokeObjectURL(url);
+            }
         }
 
-        // new pic showcase
-        if (previousImageUrl) {
-            URL.revokeObjectURL(previousImageUrl);
-        }
-
-        previousImageUrl = URL.createObjectURL(file);
-
-        profilePic = previousImageUrl;
-        selectedImage = file;
-
-        
-    }
-
-    async function saveSettings() {
-        errorMessage = '';
-
-        const cleanUsername = username.trim();
-
-        if (cleanUsername.length < MIN_USERNAME_LENGTH || cleanUsername.length > MAX_USERNAME_LENGTH) {
-            errorMessage = 'Username has to be between 3 and 20 characters';
-            return;
-        }
-
-        if (bio.length > MAX_BIO_LENGTH) {
-            errorMessage = 'Please limit your thoughts to only 160 characters';
-            return;
-        }
-
-        // ROKOOO TU TREBAM SLAT SERVEZRZZZZ
-
-        await goto('/me');
-    }
+        profileImage = data.user.profilePic;
+    });
 </script>
 
-<div class="settings_container">
+<form
+    action="?/settings"
+    method="POST"
+    enctype="multipart/form-data"
+    class="settings-container"
+>
     <h2>User Settings</h2>
-    <div class="profile_section">
-        <label class="avatar_upload">
-            <img src={profilePic} alt="User profile" />
-            <div class="avatar_overlay">
-                 <img src={photoProfile} alt="Change profile pic" />
+
+    <div class="profile-section">
+        <label class="avatar-upload">
+            <img src={profileImage} alt="User profile" />
+            <div class="avatar-overlay">
+                 <img src={profileOverlay} alt="Change profile pic" />
             </div>
 
             <input
+                name="image"
                 type="file"
+                bind:files={files}
                 accept="image/png,image/jpeg,image/webp"
-                onchange={changeProfileImage}
             />
         </label>
 
         <p>Change profile picture</p>
+        {#if settingsForm?.errors?.image}
+            <small>{settingsForm?.errors?.image}</small>
+        {/if}
     </div>
 
-    <div class="settings_divider"></div>
+    <div class="settings-divider"></div>
 
-    <div class="setting_field">
+    <div class="setting-field">
         <label for="username">Change username</label>
         <input
-            id="username"
+            name="username"
             type="text"
             bind:value={username}
             placeholder="Enter username"
-            minlength="3"
-            maxlength="20"
+            minlength={MIN_USERNAME_LENGTH}
+            maxlength={MAX_USERNAME_LENGTH}
             required
         />
-        <small>{username.length}/20</small>
+        <small>{username.length}/{MAX_USERNAME_LENGTH}</small>
+        {#if settingsForm?.errors?.username}
+            <small>{settingsForm?.errors?.username}</small>
+        {/if}
     </div>
 
-    <div class="settings_divider"></div>
+    <div class="settings-divider"></div>
 
-    <div class="setting_field">
+    <div class="setting-field">
         <label for="bio">Change bio</label>
         <textarea
-            id="bio"
+            name="bio"
             bind:value={bio}
             placeholder="What are you all about?"
-            maxlength="160"
+            maxlength={MAX_BIO_LENGTH}
             rows="4"
         ></textarea>
-        <small>{bio.length}/160</small>
+        <small>{bio.length}/{MAX_BIO_LENGTH}</small>
+        {#if settingsForm?.errors?.bio}
+            <small>{settingsForm?.errors?.bio}</small>
+        {/if}
     </div>
 
-    {#if errorMessage}
-        <p class="error_message">{errorMessage}</p>
-    {/if}
-
-    <button class="save_button" onclick={saveSettings}>
+    <button class="save-button">
         Save changes
     </button>
+</form>
+
+<div class="settings-container">
+    <h2>User Connections</h2>
+
+    {#if data.plugins.connected.length > 0}
+        <h3>Linked</h3>
+        {#each data.plugins.connected as plugin}
+            <form action="?/disconnect" method="POST" class="linked-row">
+                <p>{plugin.pTitle}</p>
+                <input type="hidden" name="plugin" value={plugin.pId}>
+
+                {#if plugin.disconnectable}
+                    <button>Unlink</button>
+                {/if}
+            </form>
+        {/each}
+    {/if}
+
+    {#if data.plugins.connected.length > 0 && data.plugins.disconnected.length > 0}
+        <div class="settings-divider"></div>
+    {/if}
+
+    {#if data.plugins.disconnected.length > 0}
+        <h3>Unlinked</h3>
+        {#each data.plugins.disconnected as plugin}
+            <div class="unlinked-row">
+                <p>{plugin.pTitle}</p>
+                <a href={plugin.loginUrl}>Link</a>
+            </div>
+        {/each}
+    {/if}
 </div>
 
 <style>
-    .settings_container {
+    .linked-row {
+        display: flex;
+        background-color: var(--color-bg);
+        margin-top: 1rem;
+        padding: 0rem 1rem;
+        border: 1px solid var(--color-border);
+        border-radius: 0.5rem;
+        justify-content: space-between;
+        color: var(--color-text);
+    }
+
+    .linked-row button {
+        padding: 0;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        color: var(--color-text);
+        font-size: 0.9rem;
+    }
+
+    .unlinked-row {
+        display: flex;
+        background-color: var(--color-bg);
+        margin-top: 1rem;
+        padding: 0rem 1rem;
+        border: 1px solid var(--color-border);
+        border-radius: 0.5rem;
+        justify-content: space-between;
+        color: var(--color-text);
+        align-items: center;
+    }
+
+    .unlinked-row a {
+        
+        padding: 0;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        color: var(--color-text);
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+
+    .settings-container {
         width: 500px;
         max-width: 90%;
         margin: 40px auto;
@@ -151,7 +197,7 @@
         font-size: 24px;
     }
 
-    .profile_section {
+    .profile-section {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -159,7 +205,7 @@
         margin-bottom: 25px;
     }
 
-    .avatar_upload {
+    .avatar-upload {
         position: relative;
         width: 130px;
         height: 130px;
@@ -169,14 +215,14 @@
         border: rgb(184, 159, 159) 2px solid;
     }
 
-    .avatar_upload img {
+    .avatar-upload img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         border-radius: 50%;
     }
 
-    .avatar_overlay {
+    .avatar-overlay {
         position: absolute;
         inset: 0;
         background: rgba(0, 0, 0, 0.55);
@@ -187,43 +233,43 @@
         transition: opacity 0.2s ease;
     }
 
-    .avatar_overlay img {
+    .avatar-overlay img {
         width: 35px;
         height: 35px;
     }
 
-    .avatar_upload:hover .avatar_overlay {
+    .avatar-upload:hover .avatar-overlay {
         opacity: 1;
     }
 
-    .avatar_upload input {
+    .avatar-upload input {
         display: none;
     }
 
-    .profile_section p {
+    .profile-section p {
         font-size: 13px;
     }
 
-    .settings_divider {
+    .settings-divider {
         height: 1px;
         width: 100%;
         background-color: var(--color-border);
         margin: 25px 0;
     }
 
-    .setting_field {
+    .setting-field {
         display: flex;
         flex-direction: column;
         gap: 10px;
     }
 
-    .setting_field label {
+    .setting-field label {
         font-weight: 600;
         font-size: 15px;
     }
 
-    .setting_field input,
-    .setting_field textarea {
+    .setting-field input,
+    .setting-field textarea {
         background-color: var(--color-bg);
         color: var(--color-text);
         border: 1px solid var(--color-border);
@@ -236,17 +282,17 @@
         transition: border-color 0.2s ease;
     }
 
-    .setting_field input:focus,
-    .setting_field textarea:focus {
+    .setting-field input:focus,
+    .setting-field textarea:focus {
         border-color: var(--color-framehover);
     }
 
-    .setting_field input::placeholder,
-    .setting_field textarea::placeholder {
+    .setting-field input::placeholder,
+    .setting-field textarea::placeholder {
         color: var(--color-text);
     }
 
-    .save_button {
+    .save-button {
         display: block;
         margin: 30px 0 0 auto;
         padding: 11px 22px;
@@ -258,7 +304,7 @@
         transition: background-color 0.2s ease;
     }
 
-    .save_button:hover {
+    .save-button:hover {
         background-color: var(--color-framehover);
     }
 </style>

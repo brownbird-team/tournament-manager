@@ -13,6 +13,8 @@ declare global {
 		interface Locals {
 			user?: User;
 			userSession?: UserSession;
+			
+			refresh: () => Promise<void>;
 		}
 	}
 }

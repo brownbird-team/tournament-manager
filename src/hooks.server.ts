@@ -6,17 +6,23 @@ export const init: ServerInit = async () => {
 }
 
 export const handle: Handle = async ({ event, resolve }) => {
-    const sessionToken = event.cookies.get('sessionToken');
 
-    if (sessionToken) {
-        const session = await userSessionRepo.findByToken(sessionToken);
+    event.locals.refresh = async () => {
+        const sessionToken = event.cookies.get('sessionToken');
 
-        if (session) {
-            event.locals.userSession = session;
-            event.locals.user =
-                await userRepo.findById(session.userId) ?? undefined;
+        if (sessionToken) {
+            const session = await userSessionRepo.findByToken(sessionToken);
+    
+            if (session) {
+                event.locals.userSession = session;
+                event.locals.user =
+                    await userRepo.findById(session.userId) ?? undefined;
+            }
         }
     }
+
+    // Fetch user based on session cookie
+    await event.locals.refresh();
 
     return await resolve(event);
 }

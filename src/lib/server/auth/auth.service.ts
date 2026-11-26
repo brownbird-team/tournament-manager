@@ -71,16 +71,6 @@ export class AuthService<
         }
     }
 
-    // Compute redirect url for given plugin ID
-    private genRedirectUri(pId: StringKeys<W>) {
-        return ORIGIN + `/oauth2/${pId}/callback`;
-    }
-
-    // Compute login url for given plugin ID
-    private genLoginUri(pId: StringKeys<W>) {
-        return ORIGIN + `/oauth2/${pId}`;
-    }
-
     // Check if plugin ID is valid and fetch config from map
     private getConfig(pId?: string) {
         if (!pId || !this.pluginReg.hasPlugin(pId))
@@ -98,6 +88,16 @@ export class AuthService<
             oauthConfig: config.oauth,
             pluginConfig: config.plugin,
         };
+    }
+
+    // Compute redirect url for given plugin ID
+    genRedirectUri(pId: StringKeys<W>) {
+        return ORIGIN + `/oauth2/${pId}/callback`;
+    }
+
+    // Compute login url for given plugin ID
+    genLoginUri(pId: StringKeys<W>) {
+        return ORIGIN + `/oauth2/${pId}`;
     }
 
     // Start auth flow, return URL where user should be redirected

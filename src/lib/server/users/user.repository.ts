@@ -2,6 +2,8 @@ import * as schema from '#lib/server/db/schema.ts';
 import type { Database } from '#lib/server/db/types.ts';
 import { eq } from 'drizzle-orm';
 import { User } from './user.entity';
+import { catchConstraint } from '../utils/catch-constraint';
+import { UniqueError } from '../utils/errors';
 
 class UserMapper {
     static toEntity(data: typeof schema.user.$inferSelect): User {
@@ -31,12 +33,18 @@ export class UserRepository {
     async save(user: User) {
         const userDb = UserMapper.toDatabase(user);
 
-        await this.db.insert(schema.user)
-            .values(userDb)
-            .onConflictDoUpdate({
-                target: schema.user.userId,
-                set: userDb,
-            });
+        const status = 
+            await catchConstraint([ 'user_username_unique' ],
+                this.db.insert(schema.user)
+                    .values(userDb)
+                    .onConflictDoUpdate({
+                        target: schema.user.userId,
+                        set: userDb,
+                    })
+            );
+
+        if (!status.ok)
+            throw new UniqueError('This username is already taken');
     }
 
     async delete(user: User) {

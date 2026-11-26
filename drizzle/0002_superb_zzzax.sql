@@ -1,0 +1,5 @@
+ALTER TABLE "user_session" DROP CONSTRAINT "user_session_user_id_plugin_id_user_connection_user_id_plugin_id_fk";
+--> statement-breakpoint
+ALTER TABLE "organization_owner" ADD CONSTRAINT "organization_owner_organization_id_organization_organization_id_fk" FOREIGN KEY ("organization_id") REFERENCES "public"."organization"("organization_id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "organization_owner" ADD CONSTRAINT "organization_owner_user_id_user_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("user_id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "user_session" ADD CONSTRAINT "user_session_user_id_plugin_id_user_connection_user_id_plugin_id_fk" FOREIGN KEY ("user_id","plugin_id") REFERENCES "public"."user_connection"("user_id","plugin_id") ON DELETE cascade ON UPDATE no action;

@@ -25,7 +25,7 @@ export const user = pgTable('user', {
     userId: uuid('user_id')
         .primaryKey(),
     username: varchar('username')
-        .unique()
+        .unique('user_username_unique')
         .notNull(),
     bio: text('bio'),
     profileImage: varchar('profile_image'),
@@ -80,7 +80,7 @@ export const userSession = pgTable('user_session', {
     foreignKey({ 
         columns: [ table.userId, table.pluginId ],
         foreignColumns: [ userConn.userId, userConn.pluginId ],
-    }),
+    }).onDelete('cascade'),
 ]);
 
 /**
@@ -100,8 +100,10 @@ export const org = pgTable('organization', {
 });
 
 export const orgOwner = pgTable('organization_owner', {
-    orgId: uuid('organization_id'),
-    userId: uuid('user_id'),
+    orgId: uuid('organization_id')
+        .references(() => org.orgId, { onDelete: 'cascade' }),
+    userId: uuid('user_id')
+        .references(() => user.userId, { onDelete: 'cascade' }),
 }, (table) => [
     primaryKey({ columns: [ table.orgId, table.userId ] }),
 ]);

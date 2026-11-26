@@ -88,4 +88,19 @@ export class UserConnectionRepository {
 
         return res.length > 0 ? UserConnectionMapper.toEntity(res[0]) : null;
     }
+
+    async findByUserAndPlugin(
+        user: User,
+        pluginId: string
+    ): Promise<UserConnection | null> {
+
+        const res = await this.db.select()
+            .from(schema.userConn)
+            .where(and(
+                eq(schema.userConn.userId, user.id),
+                eq(schema.userConn.pluginId, pluginId)
+            ));
+
+        return res.length > 0 ? UserConnectionMapper.toEntity(res[0]) : null;
+    }
 }
